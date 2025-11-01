@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import inventoryapp.composeapp.generated.resources.Res
-import inventoryapp.composeapp.generated.resources.ic_arrow_back
+import kmmui.composeapp.generated.resources.Res
+import kmmui.composeapp.generated.resources.ic_arrow_back
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

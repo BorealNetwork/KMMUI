@@ -1,7 +1,7 @@
-package com.secam.inventarios.network
+package com.borealnetwork.kmmui.network
 
-import com.secam.inventarios.domain.CUErrorData
-import com.secam.inventarios.network.CUStateApi.Error.error
+import com.borealnetwork.kmmui.domain.error.CUErrorData
+import com.borealnetwork.kmmui.network.CUStateApi.Error.error
 
 
 sealed class CUStateApi {

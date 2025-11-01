@@ -1,4 +1,4 @@
-package com.secam.inventarios.network
+package com.borealnetwork.kmmui.network
 
 
 data class CUApiResponse<T>(

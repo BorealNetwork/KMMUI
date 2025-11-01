@@ -1,4 +1,4 @@
-package com.secam.inventarios.network.core
+package com.borealnetwork.kmmui.network.core
 
 sealed class CIErrorType<out T> {
 

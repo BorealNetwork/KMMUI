@@ -1,5 +1,7 @@
 package com.borealnetwork.kmmui.di
 
+import com.borealnetwork.kmmui.di.core.coreModule
+import com.borealnetwork.kmmui.di.network.networkModule
 import org.koin.core.context.startKoin
 
 //@Composable
@@ -13,8 +15,6 @@ import org.koin.core.context.startKoin
 fun initKoin() = startKoin {
     modules(
         networkModule,
-        coreModule,
-        loginModule,
-        loginViewModelModule
+        coreModule
     )
 }

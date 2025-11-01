@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.secam.inventarios.domain.base.EMPTY_STRING
-import com.secam.inventarios.utils.toColorFilter
-import inventoryapp.composeapp.generated.resources.Res
-import inventoryapp.composeapp.generated.resources.ic_arrow_back
+import com.borealnetwork.kmmui.domain.base.EMPTY_STRING
+import com.borealnetwork.kmmui.utils.toColorFilter
+import kmmui.composeapp.generated.resources.Res
+import kmmui.composeapp.generated.resources.ic_arrow_back
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

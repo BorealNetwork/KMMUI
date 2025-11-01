@@ -38,12 +38,12 @@ import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmui.ui.theme.CUGrayColor
 import com.borealnetwork.kmmui.ui.theme.CUGrayLetterHint
 import com.borealnetwork.kmmui.ui.theme.GrayLetterHint
-import com.secam.inventarios.ui.theme.appTypography
-import com.secam.inventarios.utils.containsAlphanumericCharacters
-import com.secam.inventarios.utils.isDigitsOnly
-import inventoryapp.composeapp.generated.resources.Res
-import inventoryapp.composeapp.generated.resources.ic_design_invisibility
-import inventoryapp.composeapp.generated.resources.ic_design_visibility
+import com.borealnetwork.kmmui.ui.theme.appTypography
+import com.borealnetwork.kmmui.utils.containsAlphanumericCharacters
+import com.borealnetwork.kmmui.utils.isDigitsOnly
+import kmmui.composeapp.generated.resources.Res
+import kmmui.composeapp.generated.resources.ic_design_invisibility
+import kmmui.composeapp.generated.resources.ic_design_visibility
 import org.jetbrains.compose.resources.painterResource
 
 

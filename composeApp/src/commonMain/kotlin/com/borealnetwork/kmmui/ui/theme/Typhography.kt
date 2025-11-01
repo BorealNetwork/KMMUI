@@ -4,11 +4,10 @@ import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import inventoryapp.composeapp.generated.resources.Res
-import inventoryapp.composeapp.generated.resources.roboto
-import inventoryapp.composeapp.generated.resources.roboto_bold
-import inventoryapp.composeapp.generated.resources.roboto_light
 import kmmui.composeapp.generated.resources.Res
+import kmmui.composeapp.generated.resources.roboto
+import kmmui.composeapp.generated.resources.roboto_bold
+import kmmui.composeapp.generated.resources.roboto_light
 
 @Composable
 fun robotoFamily() = FontFamily(

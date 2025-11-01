@@ -1,5 +1,9 @@
 package com.borealnetwork.kmmui.data.datasource.core
 
+import com.borealnetwork.kmmui.domain.base.EMPTY_STRING
+import com.borealnetwork.kmmui.domain.base.INDEX_NOT_FOUND
+import com.borealnetwork.kmmui.domain.network.CUErrorResponseEnum
+import com.borealnetwork.kmmui.network.core.CUUiState
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -29,7 +33,7 @@ class CUBaseRemoteDataSourceImpl(
     suspend inline fun <reified T : Any> requestBuilder(
         request: Any? = null,
         urlString: String = EMPTY_STRING,
-        hostEnvironment: String= "https://sirema.apptitude.mx/",
+        hostEnvironment: String= EMPTY_STRING,
         headers: Headers = Headers.Empty,
 //        responseModel: KClass<out T>
     ) = try {
