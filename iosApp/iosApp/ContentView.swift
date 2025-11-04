@@ -2,6 +2,7 @@ import UIKit
 import SwiftUI
 import ComposeApp
 
+
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         MainViewControllerKt.MainViewController()
@@ -13,7 +14,7 @@ struct ComposeView: UIViewControllerRepresentable {
 struct ContentView: View {
     init(){
         // FirebaseApp.configure()
-        KoinHelperKt.doInitKoin()
+        KoinInyectionKt.koinInjection()
     }
     var body: some View {
         ComposeView()

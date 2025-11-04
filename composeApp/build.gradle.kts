@@ -27,7 +27,6 @@ kotlin {
     }
 
     sourceSets {
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -52,7 +51,6 @@ kotlin {
             implementation(libs.koin.compose.navigation)
             implementation(project(":kmmuicore"))
         }
-
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -66,6 +64,8 @@ kotlin {
             implementation(libs.kotlin.test)
         }
     }
+
+
 }
 
 android {
