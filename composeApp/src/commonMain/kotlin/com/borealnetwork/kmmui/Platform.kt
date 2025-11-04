@@ -1,18 +1,7 @@
 package com.borealnetwork.kmmui
 
-import androidx.lifecycle.ViewModel
-import org.koin.core.definition.Definition
-import org.koin.core.definition.KoinDefinition
-import org.koin.core.module.Module
-import org.koin.core.qualifier.Qualifier
-
 interface Platform {
     val name: String
 }
-
-expect inline fun <reified T : ViewModel> Module.viewModelDefinition(
-    qualifier: Qualifier? = null,
-    noinline definition: Definition<T>
-): KoinDefinition<T>
 
 expect fun getPlatform(): Platform

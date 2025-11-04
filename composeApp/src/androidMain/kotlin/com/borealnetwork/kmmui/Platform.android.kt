@@ -12,10 +12,5 @@ class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
 }
 
-actual inline fun <reified T : ViewModel> Module.viewModelDefinition(
-    qualifier: Qualifier?,
-    noinline definition: Definition<T>,
-): KoinDefinition<T> = viewModel(qualifier = qualifier, definition = definition)
-
 
 actual fun getPlatform(): Platform = AndroidPlatform()
