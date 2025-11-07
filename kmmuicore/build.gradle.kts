@@ -53,7 +53,8 @@ kotlin {
 //    jvm()
 
     androidLibrary {
-        namespace = "com.borealnetwork.kmmuicore"
+//        namespace = "com.borealnetwork.kmmuicore"
+        namespace = "io.github.baudelioandalon.kmmuicore"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
