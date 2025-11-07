@@ -8,7 +8,43 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
-    `maven-publish`
+    id("com.vanniktech.maven.publish") version "0.34.0"
+}
+
+// <module directory>/build.gradle.kts
+
+mavenPublishing {
+    publishToMavenCentral()
+
+    signAllPublications()
+
+    coordinates(group.toString(), "kmmuicore", version.toString())
+
+    pom {
+        name = "KMMUI Library"
+        description = "Libreria multiplataforma de componentes visuales y utilerias."
+        inceptionYear = "2025"
+        url = "https://github.com/BorealNetwork/KMMUI/"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "BorealNetwork"
+                name = "Team BorealNetwork"
+                url = "https://github.com/BorealNetwork/"
+            }
+        }
+        scm {
+            url = "https://github.com/BorealNetwork/KMMUI/"
+            connection = "scm:git:git://github.com/BorealNetwork/KMMUI.git"
+            developerConnection = "scm:git:ssh://git@github.com/BorealNetwork/KMMUI.git"
+        }
+    }
 }
 
 kotlin {
