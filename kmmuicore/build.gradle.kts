@@ -1,5 +1,4 @@
 import com.android.build.api.dsl.androidLibrary
-import com.android.build.gradle.internal.utils.createPublishingInfoForLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -9,6 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
     id("com.vanniktech.maven.publish") version "0.34.0"
+    id("maven-publish")
 }
 
 // <module directory>/build.gradle.kts
@@ -19,7 +19,6 @@ mavenPublishing {
     signAllPublications()
 
     coordinates(group.toString(), "kmmuicore", version.toString())
-
     pom {
         name = "KMMUI Library"
         description = "Libreria multiplataforma de componentes visuales y utilerias."
@@ -55,7 +54,10 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
-        withJava() // enable java compilation support
+        // Enables Java compilation support.
+        // This improves build times when Java compilation is not needed
+        withJava()
+
         withHostTestBuilder {}.configure {}
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -79,7 +81,7 @@ kotlin {
             isStatic = true
         }
     }
-    linuxX64()
+
     sourceSets {
 
         commonMain.dependencies {
