@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kmmui.kmmuicore.generated.resources.Res
-import kmmui.kmmuicore.generated.resources.ic_arrow_back
+import com.borealnetwork.kmmuicore.generated.resources.Res
+import com.borealnetwork.kmmuicore.generated.resources.ic_arrow_back
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

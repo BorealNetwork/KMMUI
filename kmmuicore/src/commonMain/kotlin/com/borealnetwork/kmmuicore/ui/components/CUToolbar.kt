@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
 import com.borealnetwork.kmmuicore.utils.toColorFilter
-import kmmui.kmmuicore.generated.resources.Res
-import kmmui.kmmuicore.generated.resources.ic_arrow_back
+import com.borealnetwork.kmmuicore.generated.resources.Res
+import com.borealnetwork.kmmuicore.generated.resources.ic_arrow_back
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
