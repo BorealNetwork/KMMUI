@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.androidLibrary
+import com.android.utils.TraceUtils.simpleId
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -11,6 +12,8 @@ plugins {
     id("maven-publish")
 }
 
+group = "com.borealnetwork"
+version = "1.0.0"
 // <module directory>/build.gradle.kts
 
 mavenPublishing {
