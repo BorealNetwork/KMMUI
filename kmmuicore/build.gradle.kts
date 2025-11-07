@@ -12,7 +12,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.borealnetwork"
+group = "io.github.baudelioandalon"
 version = "1.0.0"
 // <module directory>/build.gradle.kts
 
