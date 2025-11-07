@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.androidLibrary
+import com.android.build.gradle.internal.utils.createPublishingInfoForLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
+    `maven-publish`
 }
 
 kotlin {
