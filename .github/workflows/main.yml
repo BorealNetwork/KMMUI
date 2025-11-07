@@ -4,6 +4,12 @@ name: Publish
 on:
   release:
     types: [released, prereleased]
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 jobs:
   publish:
     name: Release build and publish
@@ -11,11 +17,14 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 21
+          java-version: 17
+      - name: Grant Permission to Execute Gradle
+        run: chmod +x gradlew
+      
       - name: Publish to MavenCentral
         run: ./gradlew publishToMavenCentral --no-configuration-cache
         env:
