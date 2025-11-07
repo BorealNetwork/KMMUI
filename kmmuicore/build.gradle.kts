@@ -47,7 +47,7 @@ mavenPublishing {
 }
 
 kotlin {
-    jvm()
+//    jvm()
 
     androidLibrary {
         namespace = "com.borealnetwork.kmmuicore"
@@ -71,8 +71,9 @@ kotlin {
             }
         }
     }
-    iosX64()
+
     listOf(
+//        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
