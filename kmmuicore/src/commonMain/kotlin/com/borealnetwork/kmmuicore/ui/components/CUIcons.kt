@@ -3,6 +3,7 @@ package com.borealnetwork.kmmuicore.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -77,6 +78,7 @@ fun CircularImage(
     iconTint: ColorFilter? = null,
     contentSize: Dp = 62.dp,
     size: Dp = 45.dp,
+    paddingImage: Dp = 1.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     onClick: (() -> Unit)? = null
 ) {
@@ -95,8 +97,8 @@ fun CircularImage(
             onClick = { onClick?.invoke() }) {
             Image(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .padding(5.dp),
+                    .fillMaxSize()
+                    .padding(paddingImage),
                 painter = painterResource(resource = icon),
                 contentDescription = "",
                 colorFilter = iconTint
