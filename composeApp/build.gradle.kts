@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+
+
 kotlin {
     androidTarget {
         compilerOptions {

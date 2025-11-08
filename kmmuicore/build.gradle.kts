@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.baudelioandalon"
-version = "1.0.2"
+version = "1.0.3"
 
 mavenPublishing {
     publishToMavenCentral()
@@ -51,6 +51,7 @@ mavenPublishing {
 compose.resources {
     publicResClass = true
     packageOfResClass = "io.github.baudelioandalon.kmmuicore.drawable"
+    generateResClass = always
 }
 
 kotlin {
@@ -76,6 +77,7 @@ kotlin {
                 )
             }
         }
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
     listOf(
