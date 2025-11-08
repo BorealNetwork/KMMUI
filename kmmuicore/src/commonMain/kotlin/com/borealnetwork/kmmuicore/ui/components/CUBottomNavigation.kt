@@ -24,14 +24,21 @@ import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.theme.GrayLetterShipping
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_design_invisibility
+import io.github.baudelioandalon.kmmuicore.drawable.ic_design_visibility
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+
+sealed class NavigationScreen(
+    val route: String,
+    val title: String,
+    val icon: DrawableResource = Res.drawable.ic_design_visibility
+)
 
 
 @Composable
 fun CustomBottomNavigation(
-    currentScreenId: String,
-    items: List<Pair<DrawableResource, String>>,
+    currentScreenId: NavigationScreen,
+    items: List<NavigationScreen>,
     onItemSelected: (Int) -> Unit
 ) {
     Card(
@@ -49,10 +56,10 @@ fun CustomBottomNavigation(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items.forEachIndexed { index,item ->
+            items.forEachIndexed { index, item ->
                 CustomBottomNavigationItem(
                     item = item,
-                    isSelected = item.second == currentScreenId
+                    isSelected = item == currentScreenId
                 ) {
                     onItemSelected(index)
                 }
@@ -64,7 +71,7 @@ fun CustomBottomNavigation(
 
 @Composable
 fun CustomBottomNavigationItem(
-    item: Pair<DrawableResource, String>,
+    item: NavigationScreen,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -88,14 +95,14 @@ fun CustomBottomNavigationItem(
         ) {
             painterResource(resource = Res.drawable.ic_design_invisibility)
             Icon(
-                painter = painterResource(resource = item.first),
+                painter = painterResource(resource = item.icon),
                 contentDescription = null,
                 tint = contentColor
             )
 
             AnimatedVisibility(visible = isSelected) {
                 BoldText(
-                    text = item.second,
+                    text = item.title,
                     color = contentColor,
                     fontSize = 12.sp
                 )
