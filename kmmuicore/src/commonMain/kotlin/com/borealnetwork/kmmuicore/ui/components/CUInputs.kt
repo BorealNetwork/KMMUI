@@ -41,9 +41,9 @@ import com.borealnetwork.kmmuicore.ui.theme.GrayLetterHint
 import com.borealnetwork.kmmuicore.ui.theme.appTypography
 import com.borealnetwork.kmmuicore.utils.containsAlphanumericCharacters
 import com.borealnetwork.kmmuicore.utils.isDigitsOnly
-import io.github.baudelioandalon.kmmuicore.generated.resources.Res
-import io.github.baudelioandalon.kmmuicore.generated.resources.ic_design_invisibility
-import io.github.baudelioandalon.kmmuicore.generated.resources.ic_design_visibility
+import io.github.baudelioandalon.kmmuicore.drawable.Res
+import io.github.baudelioandalon.kmmuicore.drawable.ic_design_invisibility
+import io.github.baudelioandalon.kmmuicore.drawable.ic_design_visibility
 import org.jetbrains.compose.resources.painterResource
 
 

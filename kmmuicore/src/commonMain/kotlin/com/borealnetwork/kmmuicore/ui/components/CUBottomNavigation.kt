@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.theme.GrayLetterShipping
-import io.github.baudelioandalon.kmmuicore.generated.resources.Res
-import io.github.baudelioandalon.kmmuicore.generated.resources.ic_design_invisibility
+import io.github.baudelioandalon.kmmuicore.drawable.Res
+import io.github.baudelioandalon.kmmuicore.drawable.ic_design_invisibility
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 

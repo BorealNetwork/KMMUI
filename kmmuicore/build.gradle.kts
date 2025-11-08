@@ -13,8 +13,7 @@ plugins {
 }
 
 group = "io.github.baudelioandalon"
-version = "1.0.1"
-// <module directory>/build.gradle.kts
+version = "1.0.2"
 
 mavenPublishing {
     publishToMavenCentral()
@@ -49,11 +48,14 @@ mavenPublishing {
     }
 }
 
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "io.github.baudelioandalon.kmmuicore.drawable"
+}
+
 kotlin {
-//    jvm()
 
     androidLibrary {
-//        namespace = "com.borealnetwork.kmmuicore"
         namespace = "io.github.baudelioandalon.kmmuicore"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -77,7 +79,6 @@ kotlin {
     }
 
     listOf(
-//        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
