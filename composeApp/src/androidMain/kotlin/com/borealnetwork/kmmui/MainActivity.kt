@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import com.borealnetwork.kmmuicore.di.initKoin
+import com.borealnetwork.di.koinInjection
 import org.koin.android.ext.koin.androidContext
 
 class AndroidApp : Application() {
@@ -17,7 +17,7 @@ class AndroidApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initKoin().apply {
+        koinInjection {
             androidContext(this@AndroidApp)
         }
         INSTANCE = this
