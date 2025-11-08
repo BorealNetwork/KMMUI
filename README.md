@@ -20,6 +20,31 @@ commonMain.dependencies {
   
 }
 
+**DONT FORGET** **Steps to init KoinDependencies**
+
+1. Create a new Kotlin file in CommonMain/di
+
+        import com.borealnetwork.kmmuicore.di.initKoin
+        import org.koin.core.KoinApplication
+        
+        fun koinInjection(appDeclaration: KoinApplication.() -> Unit = {}) {
+            initKoin().also {
+                appDeclaration(it)
+                //if your had another koin Dependencies add modules here
+            }
+        }
+
+
+2. In your iOSApp.swift
+
+        init() {
+            KoinHelperKt.koinInjection(appDeclaration:{ _ in })
+        }
+<img width="1194" height="550" alt="image" src="https://github.com/user-attachments/assets/f4cd9e43-0c7c-405b-a587-8f30dc415cd4" />
+
+3. ¡ENJOY!
+
+
 ### Build and Run Android Application
 
 To build and run the development version of the Android app, use the run configuration from the run widget
