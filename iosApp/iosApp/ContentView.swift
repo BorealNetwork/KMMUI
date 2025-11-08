@@ -12,10 +12,6 @@ struct ComposeView: UIViewControllerRepresentable {
 }
 
 struct ContentView: View {
-    init(){
-        // FirebaseApp.configure()
-        KoinInyectionKt.koinInjection()
-    }
     var body: some View {
         ComposeView()
             .ignoresSafeArea()
