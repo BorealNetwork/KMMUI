@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 fun CustomBottomNavigation(
     currentScreenId: String,
     items: List<Pair<DrawableResource, String>>,
-    onItemSelected: (DrawableResource) -> Unit
+    onItemSelected: (Int) -> Unit
 ) {
     Card(
         elevation = CardDefaults.cardElevation(
@@ -49,12 +49,12 @@ fun CustomBottomNavigation(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items.forEach { item ->
+            items.forEachIndexed { index,item ->
                 CustomBottomNavigationItem(
                     item = item,
                     isSelected = item.second == currentScreenId
                 ) {
-                    onItemSelected(item.first)
+                    onItemSelected(index)
                 }
             }
         }

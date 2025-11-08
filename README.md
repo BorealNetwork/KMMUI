@@ -16,7 +16,7 @@ IMPLEMENTATION
 
 commonMain.dependencies { 
 
-    implementation("io.github.baudelioandalon:kmmuicore:1.0.0")
+    implementation("io.github.baudelioandalon:kmmuicore:1.0.4")
   
 }
 
