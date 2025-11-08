@@ -28,7 +28,7 @@ import io.github.baudelioandalon.kmmuicore.drawable.ic_design_visibility
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
-sealed class NavigationScreen(
+open class NavigationScreen(
     val route: String,
     val title: String,
     val icon: DrawableResource = Res.drawable.ic_design_visibility
