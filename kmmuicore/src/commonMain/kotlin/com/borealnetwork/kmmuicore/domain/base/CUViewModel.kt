@@ -6,7 +6,9 @@ import com.borealnetwork.kmmuicore.domain.error.CUErrorData
 import com.borealnetwork.kmmuicore.network.core.CUNetworkResult
 import com.borealnetwork.kmmuicore.network.core.CUUiState
 import com.borealnetwork.kmmuicore.network.core.mapToUiState
+import com.borealnetwork.kmmuicore.utils.log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -68,6 +70,15 @@ abstract class CUViewModel : ViewModel() {
             }
         }
     }
+
+    protected fun executeFlow(block: suspend () -> Unit) =
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                block.invoke()
+            } catch (e: Exception) {
+                e.stackTraceToString().log("ERROR_VMODEL")
+            }
+        }
 
 
 }

@@ -68,3 +68,11 @@ fun String.validatePassword(extraValidation: String = EMPTY_STRING): String {
 
     return EMPTY_STRING // La contraseña es válida
 }
+
+fun String.log(key: String, error: Boolean = true) {
+    if (!error) {
+        println("$key: $this")
+    } else {
+        println("ERROR: $key: $this")
+    }
+}
