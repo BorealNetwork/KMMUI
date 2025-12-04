@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +32,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.theme.CardBackground
+import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
+import io.github.baudelioandalon.kmmuicore.drawable.Res
+import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun OptionItem(
@@ -116,5 +125,72 @@ fun AddPhotoPlaceholder(
             }
         }
 
+    }
+}
+
+@Composable
+fun RemovableItemThumb(
+    imagePainter: Painter, // Pasa aquí tu painterResource(R.drawable.tu_tractor)
+    modifier: Modifier = Modifier,
+    iconTint: Color = PrimaryColor,
+    imgClose: DrawableResource = Res.drawable.ic_close_item,
+    containerSize: Dp = 110.dp, // Tamaño del cuadrado gris
+    onRemoveClick: () -> Unit = {}
+) {
+    // Definimos el tamaño del icono de cerrar para calcular el offset
+    val closeIconSize = 32.dp
+    // El offset es la mitad del tamaño para que el centro del icono quede en la esquina
+    val iconOffset = closeIconSize / 2
+
+    // Usamos BOX para apilar elementos (Z-axis)
+    Box(
+        modifier = modifier
+            // Agregamos padding al contenedor principal igual al offset.
+            // Esto asegura que el icono que sobresale no sea cortado por layouts padres
+            // y que el espacio total del componente incluya la parte que sobresale.
+            .padding(start = iconOffset, top = iconOffset)
+    ) {
+        // 1. CAPA INFERIOR: El contenedor de la imagen (el cuadrado gris)
+        Surface(
+            modifier = Modifier
+                .size(containerSize),
+            shape = RoundedCornerShape(20.dp), // Esquinas bastante redondeadas según la imagen
+            color = CardBackground
+        ) {
+            // Usamos otro Box para centrar la imagen dentro del Surface
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(12.dp) // Un poco de margen interno para la imagen
+            ) {
+                Image(
+                    painter = imagePainter,
+                    contentDescription = "Item image",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+
+        // 2. CAPA SUPERIOR: El botón de cerrar "X"
+        // Lo colocamos en la esquina superior izquierda (TopStart).
+        // Gracias al padding que pusimos en el Box padre, al alinearlo aquí,
+        // visualmente queda superpuesto a la esquina del Surface.
+        Icon(
+            painter = painterResource(imgClose),
+            contentDescription = "Eliminar item",
+            tint = iconTint,
+            modifier = Modifier
+                .size(closeIconSize)
+                // Usamos offset negativo para moverlo hacia arriba y hacia la izquierda
+                // exactamente la mitad de su tamaño, centrando su punto medio en la esquina del contenedor.
+                .offset(x = -iconOffset, y = -iconOffset)
+                .align(Alignment.TopStart)
+                .clip(CircleShape) // Para que el efecto ripple sea redondo
+                .clickable { onRemoveClick() }
+                .background(
+                    White,
+                    CircleShape
+                ) // Un pequeño fondo blanco detrás de la X azul ayuda a que resalte más sobre el borde
+        )
     }
 }
