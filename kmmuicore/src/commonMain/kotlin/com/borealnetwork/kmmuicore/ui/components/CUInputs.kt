@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
 import com.borealnetwork.kmmuicore.ui.theme.CUGrayColor
 import com.borealnetwork.kmmuicore.ui.theme.CUGrayLetterHint
 import com.borealnetwork.kmmuicore.ui.theme.GrayLetterHint
@@ -45,6 +47,40 @@ import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_design_invisibility
 import io.github.baudelioandalon.kmmuicore.drawable.ic_design_visibility
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Preview
+@Composable
+fun ShowEditsPreview(){
+
+    var token by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(
+                EMPTY_STRING
+            )
+        )
+    }
+
+    EditTextTopLabel(
+        modifier = Modifier.fillMaxWidth()
+            .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 20.dp),
+        maxLength = 50,
+        enabledCounter = true,
+        singleLine = true,
+        textSize = 20.sp,
+        placeHolderText = "Ingresar token alfanumérico",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                if (token.text.length >= 50) {
+                }
+            }),
+        value = token,
+        onValueChange = {
+            token = it
+
+        })
+}
 
 
 @Composable
@@ -142,9 +178,9 @@ fun EditText(
 fun EditTextTopLabel(
     modifier: Modifier = Modifier,
     placeHolderText: String = "",
-    onValueChange: (String) -> Unit,
+    onValueChange: (TextFieldValue) -> Unit,
     isError: Boolean = false,
-    value: String,
+    value: TextFieldValue,
     errorMessage: String = "",
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         capitalization = KeyboardCapitalization.Words,
@@ -157,6 +193,7 @@ fun EditTextTopLabel(
     enabledHelper: Boolean = false,
     enabledCounter: Boolean = false,
     maxLength: Int = 0,
+    textSize: TextUnit = 15.sp,
     singleLine: Boolean = false,
     colors: TextFieldColors = TextFieldDefaults.colors(unfocusedLabelColor = GrayLetterHint),
     isPassword: Boolean = false,
@@ -175,7 +212,7 @@ fun EditTextTopLabel(
             modifier = Modifier.padding(bottom = 9.dp),
             text = topLabelText,
             color = Black,
-            fontSize = 15.sp,
+            fontSize = textSize,
             fontWeight = Medium,
             fontFamily = appTypography()
         )
@@ -187,13 +224,13 @@ fun EditTextTopLabel(
                 fontFamily = appTypography(),
                 color = Black,
                 fontWeight = SemiBold,
-                fontSize = 15.sp
+                fontSize = textSize
             ),
             interactionSource = interactionSource,
             value = value,
             onValueChange = {
                 if (enabledCounter) {
-                    if (it.length <= maxLength) {
+                    if (it.text.length <= maxLength) {
                         onValueChange(it)
                     }
                 } else {

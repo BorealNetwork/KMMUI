@@ -53,7 +53,7 @@ fun CUToolbarTitle(
     helpButton: Boolean = false,
     startIcon: DrawableResource = Res.drawable.ic_arrow_back,
     startIconTint: Color = White,
-    endIconTint: Color = White,
+    endIconTint: ColorFilter? = MaterialTheme.colorScheme.primary.toColorFilter(),
     titleColor: Color = Black,
     endIcon: DrawableResource = Res.drawable.ic_arrow_back,
     backgroundColor: Color = White
@@ -86,10 +86,11 @@ fun CUToolbarTitle(
             color = titleColor
         )
         if (showEndImage) {
-            CircularIcon(
+            CircularImage(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(end = 5.dp),
+                backgroundColor = White,
                 iconTint = endIconTint,
                 icon = endIcon
             ) {
