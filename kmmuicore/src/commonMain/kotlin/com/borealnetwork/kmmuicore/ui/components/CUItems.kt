@@ -18,15 +18,20 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -82,19 +87,21 @@ fun OptionItem(
 
 }
 
-// Componente para los placeholders "+"
 @Composable
 fun AddPhotoPlaceholder(
     modifier: Modifier,
-    containerSize: Dp = 110.dp,
+    iconSize: Dp = 24.dp,
+    containerSize: Dp = 80.dp,
+    roundedCornerSize: Dp = 20.dp,
+    cardColor: Color = CardBackground,
     imagePainter: Painter,
     onImageClick: () -> Unit = {}
 ) {
 
     // Definimos el tamaño del icono de cerrar para calcular el offset
-    val closeIconSize = 32.dp
+
     // El offset es la mitad del tamaño para que el centro del icono quede en la esquina
-    val iconOffset = closeIconSize / 2
+    val iconOffset = iconSize / 2
 
     // Usamos BOX para apilar elementos (Z-axis)
     Box(
@@ -108,8 +115,8 @@ fun AddPhotoPlaceholder(
         Surface(
             modifier = Modifier
                 .size(containerSize),
-            shape = RoundedCornerShape(20.dp), // Esquinas bastante redondeadas según la imagen
-            color = CardBackground
+            shape = RoundedCornerShape(roundedCornerSize), // Esquinas bastante redondeadas según la imagen
+            color = cardColor
         ) {
             // Usamos otro Box para centrar la imagen dentro del Surface
             Box(
@@ -128,19 +135,23 @@ fun AddPhotoPlaceholder(
     }
 }
 
+
+
 @Composable
 fun RemovableItemThumb(
     imagePainter: Painter, // Pasa aquí tu painterResource(R.drawable.tu_tractor)
     modifier: Modifier = Modifier,
     iconTint: Color = PrimaryColor,
-    imgClose: DrawableResource = Res.drawable.ic_close_item,
-    containerSize: Dp = 110.dp, // Tamaño del cuadrado gris
+    iconSize: Dp = 24.dp,
+    cardColor: Color = CardBackground,
+    roundedCornerSize: Dp = 20.dp,
+    imgClose: DrawableResource = io.github.baudelioandalon.kmmuicore.drawable.Res.drawable.ic_close_item,
+    containerSize: Dp = 80.dp, // Tamaño del cuadrado gris
     onRemoveClick: () -> Unit = {}
 ) {
     // Definimos el tamaño del icono de cerrar para calcular el offset
-    val closeIconSize = 32.dp
     // El offset es la mitad del tamaño para que el centro del icono quede en la esquina
-    val iconOffset = closeIconSize / 2
+    val iconOffset = iconSize / 2
 
     // Usamos BOX para apilar elementos (Z-axis)
     Box(
@@ -154,8 +165,8 @@ fun RemovableItemThumb(
         Surface(
             modifier = Modifier
                 .size(containerSize),
-            shape = RoundedCornerShape(20.dp), // Esquinas bastante redondeadas según la imagen
-            color = CardBackground
+            shape = RoundedCornerShape(roundedCornerSize), // Esquinas bastante redondeadas según la imagen
+            color = cardColor
         ) {
             // Usamos otro Box para centrar la imagen dentro del Surface
             Box(
@@ -180,7 +191,7 @@ fun RemovableItemThumb(
             contentDescription = "Eliminar item",
             tint = iconTint,
             modifier = Modifier
-                .size(closeIconSize)
+                .size(iconSize)
                 // Usamos offset negativo para moverlo hacia arriba y hacia la izquierda
                 // exactamente la mitad de su tamaño, centrando su punto medio en la esquina del contenedor.
                 .offset(x = -iconOffset, y = -iconOffset)
@@ -192,5 +203,37 @@ fun RemovableItemThumb(
                     CircleShape
                 ) // Un pequeño fondo blanco detrás de la X azul ayuda a que resalte más sobre el borde
         )
+    }
+}
+
+@Composable
+fun PhotosInfoTabRow(
+    tabs: List<String>,
+    selectedTabIndex: Int,
+    selectedTabColor: Color = PrimaryColor,
+    unselectedTabColor: Color = Gray,
+    containerColor: Color = White,
+    onTabSelected: (Int) -> Unit
+) {
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        contentColor = selectedTabColor,
+        containerColor = containerColor
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            Tab(
+                selected = selectedTabIndex == index,
+                onClick = { onTabSelected(index) },
+                text = {
+                    Text(
+                        text = tab,
+                        color = if (selectedTabIndex == index) selectedTabColor else unselectedTabColor,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                },
+                selectedContentColor = selectedTabColor,
+                unselectedContentColor = unselectedTabColor
+            )
+        }
     }
 }

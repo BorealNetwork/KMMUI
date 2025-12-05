@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.components.MediumText
@@ -59,6 +61,8 @@ fun ValidText(
     modifier: Modifier = Modifier,
     validColor: Color = Black,
     invalidColor: Color = CUGrayLetterHint,
+    textSize: TextUnit = 15.sp,
+    paddingStart: Dp = 8.dp,
     isValid: Boolean,
     text: String
 ) {
@@ -74,11 +78,11 @@ fun ValidText(
         }
 
         // Texto a la derecha
-        RegularText(
+        MediumText(
             text = text,
-            fontSize = 22.sp,
+            fontSize = textSize,
             color = if (isValid) validColor else invalidColor,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = paddingStart)
         )
     }
 }
