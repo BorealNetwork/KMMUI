@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
@@ -44,11 +46,14 @@ fun PreviewToolbar() {
 fun CUToolbarTitle(
     modifier: Modifier = Modifier,
     titleText: String = EMPTY_STRING,
+    titleFontSize: TextUnit = 20.sp,
     showStartImage: Boolean = true,
     iconTint: ColorFilter? = MaterialTheme.colorScheme.primary.toColorFilter(),
     startClicked: (() -> Unit)? = null,
     endClicked: (() -> Unit)? = null,
     showEndImage: Boolean = false,
+    iconStartSize: Dp = 100.dp,
+    iconEndSize: Dp = 100.dp,
     helpButtonClicked: (() -> Unit)? = null,
     helpButton: Boolean = false,
     startIcon: DrawableResource = Res.drawable.ic_arrow_back,
@@ -72,7 +77,7 @@ fun CUToolbarTitle(
                     .wrapContentHeight(),
                 iconTint = iconTint,
                 backgroundColor = White,
-                size = 100.dp,
+                size = iconStartSize,
                 icon = Res.drawable.ic_arrow_back
             ) {
                 startClicked?.invoke()
@@ -82,7 +87,7 @@ fun CUToolbarTitle(
             modifier = Modifier.align(Alignment.Center),
             text = titleText,
             textAlign = TextAlign.Justify,
-            fontSize = 20.sp,
+            fontSize = titleFontSize,
             color = titleColor
         )
         if (showEndImage) {
@@ -106,7 +111,7 @@ fun CUToolbarTitle(
                     modifier = Modifier
                         .fillMaxHeight()
                         .wrapContentHeight(),
-                    size = 100.dp,
+                    size = iconEndSize,
                     icon = Res.drawable.ic_arrow_back
                 ) {
                     helpButtonClicked?.invoke()
