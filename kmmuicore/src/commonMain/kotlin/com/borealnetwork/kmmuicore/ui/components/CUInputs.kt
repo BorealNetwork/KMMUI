@@ -205,6 +205,7 @@ fun EditTextTopLabel(
     placeHolderText: String = EMPTY_STRING,
     maxLength: Int = 0,
     enabled: Boolean = false,
+    showEndIcon: Boolean = true,
     enabledCounter: Boolean = false,
     textSize: TextUnit = 15.sp,
     textTopSize: TextUnit = 14.sp,
@@ -285,12 +286,14 @@ fun EditTextTopLabel(
             },
             keyboardOptions = keyboardOptions,
             trailingIcon = {
-                IconButton(onClick = endIconClicked) {
-                    Icon(
-                        painter = painterResource(endIcon),
-                        contentDescription = "Escanear QR",
-                        tint = iconTint
-                    )
+                if (showEndIcon){
+                    IconButton(onClick = endIconClicked) {
+                        Icon(
+                            painter = painterResource(endIcon),
+                            contentDescription = "Escanear QR",
+                            tint = iconTint
+                        )
+                    }
                 }
             },
             enabled = enabled,
