@@ -41,7 +41,6 @@ fun PreviewToolbar() {
         })
 }
 
-@Preview
 @Composable
 fun CUToolbarTitle(
     modifier: Modifier = Modifier,

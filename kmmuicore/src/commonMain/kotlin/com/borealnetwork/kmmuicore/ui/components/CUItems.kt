@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.theme.CardBackground
 import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
-import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -105,17 +105,13 @@ fun AddPhotoPlaceholder(
 
     // Usamos BOX para apilar elementos (Z-axis)
     Box(
-        modifier = modifier.clickable { onImageClick() }
-            // Agregamos padding al contenedor principal igual al offset.
-            // Esto asegura que el icono que sobresale no sea cortado por layouts padres
-            // y que el espacio total del componente incluya la parte que sobresale.
-            .padding(start = iconOffset, top = iconOffset)
+        modifier = modifier.padding(start = iconOffset, top = iconOffset)
     ) {
         // 1. CAPA INFERIOR: El contenedor de la imagen (el cuadrado gris)
         Surface(
             modifier = Modifier
-                .size(containerSize),
-            shape = RoundedCornerShape(roundedCornerSize), // Esquinas bastante redondeadas según la imagen
+                .size(containerSize).clickable { onImageClick() },
+            shape = RoundedCornerShape(roundedCornerSize),
             color = cardColor
         ) {
             // Usamos otro Box para centrar la imagen dentro del Surface
@@ -124,10 +120,10 @@ fun AddPhotoPlaceholder(
                 modifier = Modifier.padding(12.dp) // Un poco de margen interno para la imagen
             ) {
                 Image(
+                    modifier = Modifier.size(25.dp),
                     painter = imagePainter,
                     contentDescription = "Item image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(25.dp)
+                    contentScale = ContentScale.Fit
                 )
             }
         }
@@ -136,10 +132,9 @@ fun AddPhotoPlaceholder(
 }
 
 
-
 @Composable
 fun RemovableItemThumb(
-    imagePainter: Painter, // Pasa aquí tu painterResource(R.drawable.tu_tractor)
+    image: ImageBitmap, // Pasa aquí tu painterResource(R.drawable.tu_tractor)
     modifier: Modifier = Modifier,
     iconTint: Color = PrimaryColor,
     iconSize: Dp = 24.dp,
@@ -147,6 +142,7 @@ fun RemovableItemThumb(
     roundedCornerSize: Dp = 20.dp,
     imgClose: DrawableResource = io.github.baudelioandalon.kmmuicore.drawable.Res.drawable.ic_close_item,
     containerSize: Dp = 80.dp, // Tamaño del cuadrado gris
+    imageClicked: () -> Unit = {},
     onRemoveClick: () -> Unit = {}
 ) {
     // Definimos el tamaño del icono de cerrar para calcular el offset
@@ -170,14 +166,13 @@ fun RemovableItemThumb(
         ) {
             // Usamos otro Box para centrar la imagen dentro del Surface
             Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.padding(12.dp) // Un poco de margen interno para la imagen
+                contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = imagePainter,
+                    modifier = Modifier.fillMaxSize().clickable { imageClicked() },
+                    bitmap = image,
                     contentDescription = "Item image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize()
+                    contentScale = ContentScale.Crop
                 )
             }
         }

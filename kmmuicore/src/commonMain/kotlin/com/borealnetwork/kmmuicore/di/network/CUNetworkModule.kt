@@ -19,15 +19,16 @@ val networkModule = module {
 
     single {
         Json {
+            prettyPrint = true
             ignoreUnknownKeys = true
             isLenient = true
             encodeDefaults = false
-            prettyPrint = true
             useArrayPolymorphism = true
             allowStructuredMapKeys = true
             allowSpecialFloatingPointValues = true
             coerceInputValues = true
             explicitNulls = false
+            useAlternativeNames = false
         }
     }
     single {
