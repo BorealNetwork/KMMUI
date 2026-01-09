@@ -97,6 +97,7 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -114,6 +115,17 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.navigation)
+
+            //Permissions
+            /**
+             * Permisos
+             */
+            api(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
+            implementation(libs.moko.permissions.camera)
+            implementation(libs.moko.permissions.gallery)
+            implementation(libs.moko.permissions.location)
+            implementation(libs.moko.permissions.storage)
         }
 
         androidMain.dependencies {

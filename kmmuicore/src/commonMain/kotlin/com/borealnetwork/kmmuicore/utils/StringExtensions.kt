@@ -3,6 +3,23 @@ package com.borealnetwork.kmmuicore.utils
 import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
 import com.borealnetwork.kmmuicore.domain.base.specialChars
 
+
+/**
+ * Valida una contraseña y devuelve un mensaje de error si no es válida.
+ *
+ * @param password La contraseña a validar.
+ * @return `[EMPTY_STRING]` si la contraseña es válida, o un `String` con el mensaje de error.
+ */
+
+fun String.log(key: String, error: Boolean = true) {
+    if (!error) {
+        println("$key: $this")
+    } else {
+        println("ERROR: $key: $this")
+    }
+}
+
+
 fun String.containsAlphanumericCharacters() = matches(Regex("^[A-Za-z0-9? ,_-]+\$"))
 fun String.isDigitsOnly() = matches(Regex("[0-9]"))
 
@@ -13,11 +30,11 @@ fun String.isDigitsOnly() = matches(Regex("[0-9]"))
  * @return `[EMPTY_STRING]` si la contraseña es válida, o un `String` con el mensaje de error.
  */
 fun String.validatePassword(extraValidation: String = EMPTY_STRING): String {
-    if (this.isEmpty()) {
+    if (this.isEmpty()){
         return "La contraseña no puede ser vacia"
     }
 
-    if (this != extraValidation && extraValidation.isNotEmpty()) {
+    if (this != extraValidation && extraValidation.isNotEmpty()){
         return "Las contraseñas no coinciden"
     }
     // Regla 1: Mínimo 8 caracteres
@@ -67,12 +84,4 @@ fun String.validatePassword(extraValidation: String = EMPTY_STRING): String {
     }
 
     return EMPTY_STRING // La contraseña es válida
-}
-
-fun String.log(key: String, error: Boolean = true) {
-    if (!error) {
-        println("$key: $this")
-    } else {
-        println("ERROR: $key: $this")
-    }
 }
