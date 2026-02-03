@@ -238,7 +238,7 @@ fun EditTextTopLabel(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 4.dp, top = 40.dp), // Espacio entre etiqueta y caja
+                .padding(bottom = 4.dp), // Espacio entre etiqueta y caja
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
