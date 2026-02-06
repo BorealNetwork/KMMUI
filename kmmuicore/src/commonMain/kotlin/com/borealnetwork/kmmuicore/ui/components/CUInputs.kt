@@ -82,9 +82,7 @@ fun ShowEditsPreview(){
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, top = 20.dp, end = 8.dp, bottom = 20.dp),
         maxLength = 50,
-        enabledCounter = true,
         singleLine = true,
-        textSize = 20.sp,
         placeHolderText = "Ingresar token alfanumérico",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         keyboardActions = KeyboardActions(
@@ -190,125 +188,136 @@ fun EditText(
         }
     }
 }
-
 @Composable
 fun EditTextTopLabel(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    topLabelText: String = "",
+    placeHolderText: String = "",
+    enabled: Boolean = true,
+    maxLength: Int = Int.MAX_VALUE,
+    avoidSpecialCharacters: Boolean = true,
+    singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         capitalization = KeyboardCapitalization.Words,
         keyboardType = KeyboardType.Text
     ),
-    keyboardActions: KeyboardActions = KeyboardActions { },
-    singleLine: Boolean = true,
-    topLabelText: String = EMPTY_STRING,
-    placeHolderText: String = EMPTY_STRING,
-    maxLength: Int = 0,
-    enabled: Boolean = false,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     showEndIcon: Boolean = true,
-    enabledCounter: Boolean = false,
-    textSize: TextUnit = 15.sp,
-    textTopSize: TextUnit = 14.sp,
     iconTint: Color = PrimaryColor,
-    borderColor: Color = PrimaryColor,
-    textColor: Color = Black,
-    textTopColor: Color = TextTopColor,
-    textDisabledColor: Color = TextDisabledColor,
-    borderDisabledColor: Color = BorderDisabledColor,
-    endIcon: DrawableResource = Res.drawable.ic_qrcode,
     showTopEndIcon: Boolean = true,
+    endIcon: DrawableResource = Res.drawable.ic_qrcode,
     topEndIcon: DrawableResource = Res.drawable.ic_help,
-    fontFamilyTop: FontFamily = robotoFamily(),
-    fontWeightTop: FontWeight = SemiBold,
-    fontFamilyPlaceholder: FontFamily = robotoFamily(),
-    fontWeightPlaceholder: FontWeight = Bold,
     endIconClicked: () -> Unit = {},
-    topEndIconClicked: () -> Unit = {},
-    onValueChange: (TextFieldValue) -> Unit
+    topEndIconClicked: () -> Unit = {}
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
+    // 1. Memorizar colores para evitar cálculos en recomposición
+    val borderColor = if (enabled) PrimaryColor else BorderDisabledColor
+    val textColor = if (enabled) Black else TextDisabledColor
 
-    val backgroundBorderColor = if (enabled) borderColor else borderDisabledColor
-    val textFieldColor = if (enabled) textColor else textDisabledColor
-
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        // 1. Fila Superior: Etiqueta "Token" e Icono de Ayuda (?)
+    Column(modifier = modifier.fillMaxWidth()) {
+        // --- Fila Superior ---
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 4.dp), // Espacio entre etiqueta y caja
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = topLabelText,
-                fontSize = textTopSize,
-                color = textTopColor,
-                fontFamily = fontFamilyTop,
-                fontWeight = fontWeightTop
+                fontSize = 14.sp,
+                color = TextTopColor,
+                fontWeight = SemiBold
             )
             if (showTopEndIcon) {
                 Icon(
                     painter = painterResource(topEndIcon),
                     contentDescription = "Ayuda",
-                    tint = iconTint,
+                    tint = PrimaryColor,
                     modifier = Modifier
                         .size(20.dp)
-                        .clickable { topEndIconClicked() }
+                        .clickable(onClick = topEndIconClicked)
                 )
             }
-
         }
 
-        // 2. Campo de Texto (OutlinedTextField)
+        // --- Campo de Texto ---
         OutlinedTextField(
             value = value,
-            onValueChange = {
-                if (enabledCounter) {
-                    if (it.text.length <= maxLength) {
-                        onValueChange(it)
-                    }
-                } else {
-                    onValueChange(it)
+            onValueChange = { newValue ->
+                if (validateInput(
+                        newValue.text,
+                        maxLength,
+                        avoidSpecialCharacters,
+                        keyboardOptions.keyboardType
+                    )
+                ) {
+                    onValueChange(newValue)
                 }
             },
-            interactionSource = interactionSource,
             modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = singleLine,
             placeholder = {
-                Text(
-                    text = placeHolderText,
-                    fontSize = textSize,
-                    color = textFieldColor,
-                    fontFamily = fontFamilyPlaceholder,
-                    fontWeight = fontWeightPlaceholder
-                )
+                Text(text = placeHolderText, color = textColor.copy(alpha = 0.6f))
             },
-            keyboardOptions = keyboardOptions,
             trailingIcon = {
-                if (showEndIcon){
+                if (showEndIcon) {
                     IconButton(onClick = endIconClicked) {
                         Icon(
                             painter = painterResource(endIcon),
-                            contentDescription = "Escanear QR",
+                            contentDescription = null,
                             tint = iconTint
                         )
                     }
                 }
             },
-            enabled = enabled,
-            singleLine = singleLine,
+            keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
-            shape = RoundedCornerShape(2.dp),
+            shape = RoundedCornerShape(4.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = backgroundBorderColor,
-                unfocusedBorderColor = backgroundBorderColor,
-                cursorColor = backgroundBorderColor,
+                focusedBorderColor = borderColor,
+                unfocusedBorderColor = borderColor,
+                disabledBorderColor = BorderDisabledColor,
                 focusedContainerColor = White,
                 unfocusedContainerColor = White
             )
         )
     }
+}
+
+private fun validateInput(
+    text: String,
+    maxLength: Int,
+    avoidSpecialChars: Boolean,
+    keyboardType: KeyboardType
+): Boolean {
+// 1. Control de longitud (Siempre primero)
+    if (text.length > maxLength) return false
+
+    // 2. Si el texto está vacío, permitirlo (para poder borrar)
+    if (text.isEmpty()) return true
+
+    val lastChar = text.last()
+
+    // 3. FILTRO ESTRICTO PARA NÚMEROS
+    // Si el teclado es de tipo Number o NumberPassword, solo aceptamos dígitos.
+    if (keyboardType == KeyboardType.Number || keyboardType == KeyboardType.NumberPassword) {
+        return lastChar.isDigit()
+    }
+
+    // 4. Validación para Email
+    if (keyboardType == KeyboardType.Email) {
+        return text.matches("[a-zA-Z0-9-.\\-_@#]*".toRegex())
+    }
+
+    // 5. Filtro de caracteres especiales (para texto normal)
+    if (avoidSpecialChars) {
+        return lastChar.isLetterOrDigit()
+    }
+
+    // Si avoidSpecialChars es false y no es un campo numérico, aceptamos todo
+    return true
 }
 
 @Composable
