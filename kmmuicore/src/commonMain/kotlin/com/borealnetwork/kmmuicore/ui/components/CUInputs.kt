@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -192,11 +194,18 @@ fun EditText(
 fun EditTextTopLabel(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
+    height: Dp = 0.dp,
     onValueChange: (TextFieldValue) -> Unit,
     topLabelText: String = "",
     placeHolderText: String = "",
+    disabledTextColor: Color = TextDisabledColor,
     enabled: Boolean = true,
+    textSize: TextUnit = 15.sp,
     maxLength: Int = Int.MAX_VALUE,
+    topLabelFontWeight: FontWeight = SemiBold,
+    fontWeight: FontWeight = SemiBold,
+    fontWeightPlaceHolder: FontWeight = SemiBold,
+    fontFamily: FontFamily = appTypography(),
     avoidSpecialCharacters: Boolean = true,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
@@ -214,7 +223,7 @@ fun EditTextTopLabel(
 ) {
     // 1. Memorizar colores para evitar cálculos en recomposición
     val borderColor = if (enabled) PrimaryColor else BorderDisabledColor
-    val textColor = if (enabled) Black else TextDisabledColor
+    val textColor = if (enabled) Black else disabledTextColor
 
     Column(modifier = modifier.fillMaxWidth()) {
         // --- Fila Superior ---
@@ -224,10 +233,11 @@ fun EditTextTopLabel(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                fontFamily = fontFamily,
                 text = topLabelText,
                 fontSize = 14.sp,
                 color = TextTopColor,
-                fontWeight = SemiBold
+                fontWeight = topLabelFontWeight
             )
             if (showTopEndIcon) {
                 Icon(
@@ -244,6 +254,12 @@ fun EditTextTopLabel(
         // --- Campo de Texto ---
         OutlinedTextField(
             value = value,
+            textStyle = TextStyle(
+                fontFamily = fontFamily,
+                color = textColor,
+                fontWeight = fontWeight,
+                fontSize = textSize
+            ),
             onValueChange = { newValue ->
                 if (validateInput(
                         newValue.text,
@@ -255,11 +271,24 @@ fun EditTextTopLabel(
                     onValueChange(newValue)
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = if (height == 0.dp) {
+                Modifier.fillMaxWidth()
+            } else {
+                Modifier.fillMaxWidth().height(height)
+            },
             enabled = enabled,
             singleLine = singleLine,
             placeholder = {
-                Text(text = placeHolderText, color = textColor.copy(alpha = 0.6f))
+                Text(
+                    text = placeHolderText,
+                    style = TextStyle(
+                        fontFamily = fontFamily,
+                        color = textColor,
+                        fontWeight = fontWeightPlaceHolder,
+                        fontSize = textSize
+                    ),
+                    color = textColor.copy(alpha = 0.6f)
+                )
             },
             trailingIcon = {
                 if (showEndIcon) {
