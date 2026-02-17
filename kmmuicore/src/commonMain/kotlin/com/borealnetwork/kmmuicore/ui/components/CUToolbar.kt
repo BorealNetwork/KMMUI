@@ -1,12 +1,14 @@
 package com.borealnetwork.kmmuicore.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import com.borealnetwork.kmmuicore.utils.toColorFilter
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_arrow_back
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -100,6 +103,92 @@ fun CUToolbarTitle(
             ) {
                 endClicked?.invoke()
             }
+        }
+        if (helpButton) {
+            Surface(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                color = MaterialTheme.colorScheme.primary
+            ) {
+                CircularImage(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .wrapContentHeight(),
+                    size = iconEndSize,
+                    icon = Res.drawable.ic_arrow_back
+                ) {
+                    helpButtonClicked?.invoke()
+                }
+            }
+        }
+    }
+
+}
+
+
+@Composable
+fun CUToolbarTitleIcon(
+    modifier: Modifier = Modifier,
+    modifierStartIcon: Modifier = Modifier,
+    modifierEndIcon: Modifier = Modifier,
+    titleText: String = EMPTY_STRING,
+    titleFontSize: TextUnit = 20.sp,
+    showStartImage: Boolean = true,
+    startClicked: (() -> Unit)? = null,
+    endClicked: (() -> Unit)? = null,
+    showEndImage: Boolean = false,
+    iconEndSize: Dp = 100.dp,
+    helpButtonClicked: (() -> Unit)? = null,
+    helpButton: Boolean = false,
+    startIcon: DrawableResource = Res.drawable.ic_arrow_back,
+    startIconTint: Color = White,
+    endIconTint: Color = White,
+    titleColor: Color = Black,
+    endIcon: DrawableResource = Res.drawable.ic_arrow_back,
+    backgroundColor: Color = White
+) {
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(backgroundColor)
+    ) {
+        if (showStartImage) {
+            Icon(
+                painter = painterResource(
+                    resource = startIcon
+                ),
+                contentDescription = "Mostrar PIN",
+                tint = startIconTint,
+                modifier = modifierStartIcon
+                    .fillMaxHeight()
+                    .wrapContentHeight().clickable {
+                        startClicked?.invoke()
+                    }
+            )
+        }
+        BoldText(
+            modifier = Modifier.align(Alignment.Center),
+            text = titleText,
+            textAlign = TextAlign.Justify,
+            fontSize = titleFontSize,
+            color = titleColor
+        )
+        if (showEndImage) {
+            Icon(
+                painter = painterResource(
+                    resource = endIcon
+                ),
+                contentDescription = "Mostrar PIN",
+                tint = endIconTint,
+                modifier = modifierEndIcon
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 5.dp).clickable {
+                        endClicked?.invoke()
+                    }
+            )
+
+
         }
         if (helpButton) {
             Surface(
