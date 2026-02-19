@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -56,7 +55,6 @@ import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
 import com.borealnetwork.kmmuicore.ui.theme.TextDisabledColor
 import com.borealnetwork.kmmuicore.ui.theme.TextTopColor
 import com.borealnetwork.kmmuicore.ui.theme.appTypography
-import com.borealnetwork.kmmuicore.ui.theme.robotoFamily
 import com.borealnetwork.kmmuicore.utils.containsAlphanumericCharacters
 import com.borealnetwork.kmmuicore.utils.isDigitsOnly
 import io.github.baudelioandalon.kmmuicore.drawable.Res
@@ -70,7 +68,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun ShowEditsPreview(){
+fun ShowEditsPreview() {
 
     var token by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
@@ -190,6 +188,7 @@ fun EditText(
         }
     }
 }
+
 @Composable
 fun EditTextTopLabel(
     modifier: Modifier = Modifier,
@@ -376,7 +375,11 @@ fun EditTextBottomLabel(
     enabledCounter: Boolean = false,
     maxLength: Int = 0,
     singleLine: Boolean = false,
-    colors: TextFieldColors = TextFieldDefaults.colors(),
+    colors: TextFieldColors = TextFieldDefaults.colors().copy(
+        focusedContainerColor = White,
+        unfocusedContainerColor = White,
+        disabledContainerColor = White
+    ),
     isPassword: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
