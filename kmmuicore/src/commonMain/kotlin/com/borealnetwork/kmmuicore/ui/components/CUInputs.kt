@@ -350,45 +350,40 @@ private fun validateInput(
 
 @Composable
 fun EditTextBottomLabel(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     innerModifier: Modifier = Modifier,
     placeHolderText: String = "",
-    onValueChange: (TextFieldValue) -> Unit,
     isError: Boolean = false,
-    value: TextFieldValue,
-
-    avoidSpecialCharacters: Boolean = true,
-    errorMessage: String = "",
-    onlyNumbers: Boolean = false,
+    maxLength: Int = Int.MAX_VALUE,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isPassword: Boolean = false,
+    label: @Composable (() -> Unit)? = null,
+    fontFamily: FontFamily = appTypography(),
+    textSize: TextUnit = 15.sp,
+    enabledHelper: Boolean = true,
+    avoidSpecialChars: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         capitalization = KeyboardCapitalization.Words,
         keyboardType = KeyboardType.Text
     ),
-    keyboardActions: KeyboardActions = KeyboardActions { },
-    trailingIcon: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true,
-    fontFamily: FontFamily = appTypography(),
-    textSize: TextUnit = 15.sp,
-    bottomLabelText: String = "",
-    label: @Composable (() -> Unit)? = null,
-    enabledHelper: Boolean = true,
-    enabledCounter: Boolean = false,
-    maxLength: Int = 0,
+    preventSpaces: Boolean = false,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     singleLine: Boolean = false,
-    colors: TextFieldColors = TextFieldDefaults.colors().copy(
-        focusedContainerColor = White,
-        unfocusedContainerColor = White,
-        disabledContainerColor = White
-    ),
-    isPassword: Boolean = false,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    enabled: Boolean = true,
+    bottomLabelText: String = EMPTY_STRING,
+    errorMessage: String = EMPTY_STRING
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var passwordVisibility by remember { mutableStateOf(isPassword) }
     val icon = if (passwordVisibility)
-        painterResource(resource = Res.drawable.ic_design_invisibility)
+        painterResource(resource = io.github.baudelioandalon.kmmuicore.drawable.Res.drawable.ic_design_invisibility)
     else
-        painterResource(resource = Res.drawable.ic_design_visibility)
+        painterResource(resource = io.github.baudelioandalon.kmmuicore.drawable.Res.drawable.ic_design_visibility)
+    val isEmail = keyboardOptions.keyboardType == KeyboardType.Email
 
     Column(modifier = modifier) {
 
@@ -404,69 +399,41 @@ fun EditTextBottomLabel(
             label = label,
             interactionSource = interactionSource,
             value = value,
-            onValueChange = {
-                if (it.text.isEmpty()) {
-                    onValueChange(it)
-                } else if (!avoidSpecialCharacters && !it.text.last().toString()
-                        .containsAlphanumericCharacters() || it.text.isNotEmpty() && keyboardOptions == KeyboardOptions(
-                        keyboardType = KeyboardType.Email
-                    ) && !it.text.matches("[a-zA-Z-0-9-.\\-_@#]+".toRegex()) || !it.text.last()
-                        .isLetterOrDigit() && !it.text.matches("[a-zA-Z-0-9-.\\-_@#]+".toRegex())
-                ) {
+            onValueChange = { newValue ->
+                // 1. Validar la longitud máxima
+                if (newValue.text.length <= maxLength) {
 
-                } else {
-                    if (enabledCounter) {
-                        if (onlyNumbers && it.text.matches(".*[-.].*".toRegex())) return@OutlinedTextField
-                        if (it.text.last().toString().isDigitsOnly() && it.text.length <= maxLength
-                            || it.text.isEmpty()
-                            || it.text.length <= maxLength && !onlyNumbers
-                            || it.text.length <= maxLength && onlyNumbers && it.text.replace(
-                                " ",
-                                ""
-                            ).last().toString().isDigitsOnly()
-                        ) {
-                            onValueChange(
-                                TextFieldValue(
-                                    text = it.text,
-                                    selection = it.selection
-                                )
-                            )
-                        } else if (it.text.length <= maxLength && it.text.replace(" ", "").last()
-                                .toString() < value.text.replace(" ", "").last().toString()
-                        ) {
-                            onValueChange(
-                                TextFieldValue(
-                                    text = it.text,
-                                    selection = it.selection
-                                )
-                            )
-
-                        }
+                    // 2. Validar que no contenga espacios si preventSpaces es true
+                    val hasNoSpaces = if (preventSpaces) {
+                        !newValue.text.contains(" ")
                     } else {
-                        if (!onlyNumbers || onlyNumbers && it.text.last().toString()
-                                .isDigitsOnly()
-                        ) {
-                            onValueChange(
-                                TextFieldValue(
-                                    text = it.text,
-                                    selection = it.selection
-                                )
-                            )
-                        }
+                        true
+                    }
+
+                    // 3. Validar caracteres especiales (ignorando si es Email)
+                    val isValidFormat = if (avoidSpecialChars && !isEmail) {
+                        // Nota: Si preventSpaces es true, el espacio que permite este Regex
+                        // ya fue bloqueado por el filtro anterior (hasNoSpaces).
+                        val regex = Regex("^[a-zA-Z0-9 ]*\$")
+                        newValue.text.matches(regex)
+                    } else {
+                        true
+                    }
+
+                    // 4. Si pasa todas las validaciones, enviamos el valor
+                    if (hasNoSpaces && isValidFormat) {
+                        onValueChange(newValue)
                     }
                 }
-            }, placeholder = {
+            },
+
+            placeholder = {
                 SemiBoldText(
                     text = placeHolderText,
                     color = CUGrayLetterHint,
                     fontSize = 15.sp
                 )
             },
-            colors = colors,
-            isError = isError,
-            keyboardOptions = if (isPassword) KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ) else keyboardOptions,
             trailingIcon = {
                 if (isPassword) IconButton(onClick = {
                     passwordVisibility = !passwordVisibility
@@ -477,6 +444,11 @@ fun EditTextBottomLabel(
                     )
                 } else trailingIcon?.invoke()
             },
+            isError = isError,
+            colors = colors,
+            keyboardOptions = if (isPassword) KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ) else keyboardOptions,
             enabled = enabled,
             shape = RoundedCornerShape(12.dp),
             singleLine = singleLine,
@@ -484,7 +456,6 @@ fun EditTextBottomLabel(
             visualTransformation = if (!passwordVisibility) visualTransformation
             else PasswordVisualTransformation(mask = '●')
         )
-
         if (enabledHelper) {
             RegularText(
                 modifier = Modifier
