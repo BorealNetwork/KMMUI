@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import com.borealnetwork.kmmuicore.network.core.CUUiState
 
 @Composable
-fun ValidationQuery(status: CUUiState<*>, onNextView: () -> Unit = {}) {
+fun ValidationQuery(status: CUUiState<*>, onError: (String) -> Unit = {},onNextView: () -> Unit = {}) {
     when (status) {
         is CUUiState.Error<*> -> {
             status.message?.let {
                 println(it)
-//                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                onError(it)
             }
         }
 
