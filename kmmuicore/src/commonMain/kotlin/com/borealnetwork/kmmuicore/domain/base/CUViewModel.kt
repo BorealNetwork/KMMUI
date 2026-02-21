@@ -17,7 +17,7 @@ abstract class CUViewModel : ViewModel() {
 
     protected fun <T> fetchData(
         uiStateFlow: MutableStateFlow<CUUiState<T?>>,
-        interceptor: (CUUiState<T?>) -> Unit = {},
+        interceptor: suspend (CUUiState<T?>) -> Unit = {},
         apiCall: suspend () -> Flow<CUUiState<T?>>
     ) = viewModelScope.launch {
         uiStateFlow.value = CUUiState.Loading
