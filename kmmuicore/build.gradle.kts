@@ -126,6 +126,14 @@ kotlin {
             implementation(libs.moko.permissions.gallery)
             implementation(libs.moko.permissions.location)
             implementation(libs.moko.permissions.storage)
+
+            /**
+             * Conectividad
+             */
+            implementation(libs.konnectivity)
+
+            implementation(libs.androidx.datastore.preferences) // O la versión 1.2.0 estable
+            implementation(libs.androidx.datastore)
         }
 
         androidMain.dependencies {
@@ -133,6 +141,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.androidx.exifinterface)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

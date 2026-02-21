@@ -1,13 +1,177 @@
 package com.borealnetwork.kmmuicore
 
+import androidx.compose.runtime.Composable
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
+import com.borealnetwork.kmmuicore.data.datastore.createDataStore
+import com.borealnetwork.kmmuicore.domain.datastore.DataStorePath
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.readValue
+import kotlinx.cinterop.useContents
+import kotlinx.cinterop.usePinned
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module
 import org.koin.core.qualifier.Qualifier
+import org.koin.dsl.module
+import platform.CoreGraphics.CGRectMake
+import platform.CoreGraphics.CGSizeMake
+import platform.CoreLocation.CLGeocoder
+import platform.CoreLocation.CLLocation
+import platform.CoreLocation.CLPlacemark
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSURL
+import platform.Foundation.NSUserDomainMask
+import platform.Photos.PHAsset
+import platform.Photos.PHImageContentModeAspectFit
+import platform.Photos.PHImageManager
+import platform.Photos.PHImageManagerMaximumSize
+import platform.Photos.PHImageRequestOptions
+import platform.Photos.PHImageRequestOptionsDeliveryModeHighQualityFormat
+import platform.UIKit.UIGraphicsBeginImageContextWithOptions
+import platform.UIKit.UIGraphicsEndImageContext
+import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
+import platform.UIKit.UIImage
+import platform.UIKit.UIImageJPEGRepresentation
+import platform.posix.exit
+import platform.posix.memcpy
+import kotlin.coroutines.resume
 
 
 actual inline fun <reified T : ViewModel> Module.viewModelDefinition(
     qualifier: Qualifier?,
     noinline definition: Definition<T>,
 ): KoinDefinition<T> = factory(qualifier = qualifier, definition = definition)
+
+
+@OptIn(ExperimentalForeignApi::class)
+actual fun getFixedImageBytes(path: String, maxWidth: Int): ByteArray {
+    val image = if (path.startsWith("ph://")) {
+        fetchImageFromPhotoKit(path)
+    } else {
+        UIImage.imageWithContentsOfFile(path)
+    } ?: return byteArrayOf()
+
+    // 1. Calcular el nuevo tamaño manteniendo la proporción (Aspect Ratio)
+    val originalSize = image.size
+    val width = originalSize.useContents { width }
+    val height = originalSize.useContents { height }
+
+    val targetWidth: Double
+    val targetHeight: Double
+
+    if (width > maxWidth) {
+        val ratio = width / height
+        targetWidth = maxWidth.toDouble()
+        targetHeight = targetWidth / ratio
+    } else {
+        targetWidth = width
+        targetHeight = height
+    }
+
+    // 2. Crear un contexto gráfico para redimensionar y normalizar la rotación
+    // Esto "aplana" la imagen para que los píxeles coincidan con la orientación visual
+    UIGraphicsBeginImageContextWithOptions(
+        size = CGSizeMake(targetWidth, targetHeight),
+        opaque = false,
+        scale = 1.0 // Usamos 1.0 para controlar los píxeles exactos
+    )
+
+    image.drawInRect(CGRectMake(0.0, 0.0, targetWidth, targetHeight))
+    val normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+
+    if (normalizedImage == null) return byteArrayOf()
+
+    // 3. Comprimir a JPEG (calidad 0.85 para ahorrar espacio sin perder mucha calidad)
+    val data = UIImageJPEGRepresentation(normalizedImage, 0.85) ?: return byteArrayOf()
+
+    // 4. Convertir NSData a Kotlin ByteArray
+    return ByteArray(data.length.toInt()).apply {
+        usePinned { pinned ->
+            memcpy(pinned.addressOf(0), data.bytes, data.length)
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun fetchImageFromPhotoKit(phPath: String): UIImage? {
+    val localId = phPath.replace("ph://", "")
+    val fetchResult = PHAsset.fetchAssetsWithLocalIdentifiers(listOf(localId), null)
+    val asset = fetchResult.firstObject() as? PHAsset ?: return null
+
+    var resultImage: UIImage? = null
+    val options = PHImageRequestOptions().apply {
+        synchronous = true // Necesario para que la función retorne los bytes al instante
+        networkAccessAllowed = true
+        deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat
+    }
+
+    PHImageManager.defaultManager().requestImageForAsset(
+        asset = asset,
+        targetSize = PHImageManagerMaximumSize.readValue(), // Obtenemos la original, luego redimensionamos arriba
+        contentMode = PHImageContentModeAspectFit,
+        options = options
+    ) { image, _ ->
+        resultImage = image
+    }
+
+    return resultImage
+}
+
+actual class GeocodingService {
+    actual suspend fun getAddress(lat: Double, lon: Double): String? =
+        suspendCancellableCoroutine { continuation ->
+            val geocoder = CLGeocoder()
+            val location = CLLocation(latitude = lat, longitude = lon)
+
+            // Requiere manejo de callbacks (suspendCoroutine recomendado aquí)
+            // Simplificado:
+            geocoder.reverseGeocodeLocation(location) { placemarks, error ->
+                if (error != null) {
+                    // Si hay error, resumimos con null o podrías lanzar una excepción
+                    continuation.resume(null)
+                    return@reverseGeocodeLocation
+                }
+
+                val placemark = placemarks?.firstOrNull() as? CLPlacemark
+                if (placemark != null) {
+                    // Extraemos los componentes de la dirección
+                    val street = placemark.thoroughfare ?: ""       // Calle
+                    val number = placemark.subThoroughfare ?: ""    // Número
+                    val city = placemark.locality ?: ""             // Ciudad
+                    val state = placemark.administrativeArea ?: ""   // Estado/Provincia
+
+                    val fullAddress = listOfNotNull(
+                        if (street.isNotEmpty()) "$street $number".trim() else null,
+                        city.ifEmpty { null },
+                        state.ifEmpty { null }
+                    ).joinToString(", ")
+
+                    continuation.resume(fullAddress)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+        }
+}
+
+
+
+actual fun closeApplication() {
+    // Fuerza la salida del programa (Cuidado: Apple lo ve como un crash)
+    exit(0)
+}
+
+@Composable
+actual fun BackPressHandler(
+    isEnabled: Boolean,
+    onBackPressed: () -> Unit
+) {
+    // Intencionalmente vacío.
+    // En iOS, el retroceso se maneja visualmente con el botón "< Atrás" en la TopAppBar
+}
