@@ -134,6 +134,11 @@ kotlin {
 
             implementation(libs.androidx.datastore.preferences) // O la versión 1.2.0 estable
             implementation(libs.androidx.datastore)
+
+            implementation(libs.qr.scanner.plugin)
+            implementation(libs.ocr.plugin)
+            implementation(libs.qr.kit)
+
         }
 
         androidMain.dependencies {

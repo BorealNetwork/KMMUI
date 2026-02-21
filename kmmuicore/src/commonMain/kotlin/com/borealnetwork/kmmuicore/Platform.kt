@@ -20,7 +20,7 @@ expect class GeocodingService {
     suspend fun getAddress(lat: Double, lon: Double): String?
 }
 
-
+expect fun compressImage(imageData: ByteArray, quality: Double = 0.7): ByteArray
 
 expect fun closeApplication()
 

@@ -1,11 +1,8 @@
 package com.borealnetwork.kmmuicore
 
 import androidx.compose.runtime.Composable
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
-import com.borealnetwork.kmmuicore.data.datastore.createDataStore
-import com.borealnetwork.kmmuicore.domain.datastore.DataStorePath
+import com.kashif.cameraK.utils.toByteArray
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.readValue
@@ -16,16 +13,11 @@ import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module
 import org.koin.core.qualifier.Qualifier
-import org.koin.dsl.module
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSizeMake
 import platform.CoreLocation.CLGeocoder
 import platform.CoreLocation.CLLocation
 import platform.CoreLocation.CLPlacemark
-import platform.Foundation.NSDocumentDirectory
-import platform.Foundation.NSFileManager
-import platform.Foundation.NSURL
-import platform.Foundation.NSUserDomainMask
 import platform.Photos.PHAsset
 import platform.Photos.PHImageContentModeAspectFit
 import platform.Photos.PHImageManager
@@ -39,6 +31,7 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
 import platform.posix.exit
 import platform.posix.memcpy
+import qrgenerator.toNSData
 import kotlin.coroutines.resume
 
 
@@ -160,7 +153,12 @@ actual class GeocodingService {
         }
 }
 
-
+actual fun compressImage(imageData: ByteArray, quality: Double): ByteArray {
+    val data = imageData.toNSData()
+    val image = UIImage.imageWithData(data)
+    val compressedData = UIImageJPEGRepresentation(image!!, 0.7) // 0.7 es la calidad
+    return compressedData!!.toByteArray()
+}
 
 actual fun closeApplication() {
     // Fuerza la salida del programa (Cuidado: Apple lo ve como un crash)

@@ -158,6 +158,15 @@ actual fun closeApplication() {
     exitProcess(0)
 }
 
+actual fun compressImage(imageData: ByteArray, quality: Double): ByteArray {
+    val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+    val outputStream = ByteArrayOutputStream()
+    // Reducimos al 70% de calidad y formato JPEG (pesa mucho menos que PNG)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, quality.toInt(), outputStream)
+    return outputStream.toByteArray()
+}
+
+
 @Composable
 actual fun BackPressHandler(
     isEnabled: Boolean,
