@@ -17,12 +17,13 @@ abstract class CUViewModel : ViewModel() {
 
     protected fun <T> fetchData(
         uiStateFlow: MutableStateFlow<CUUiState<T?>>,
+        interceptor: (CUUiState<T?>) -> Unit = {},
         apiCall: suspend () -> Flow<CUUiState<T?>>
     ) = viewModelScope.launch {
-//        if (hasInternetConnection(context)) {
         uiStateFlow.value = CUUiState.Loading
         try {
             apiCall().collect {
+                interceptor.invoke(it)
                 uiStateFlow.value = it
             }
         } catch (e: Exception) {
