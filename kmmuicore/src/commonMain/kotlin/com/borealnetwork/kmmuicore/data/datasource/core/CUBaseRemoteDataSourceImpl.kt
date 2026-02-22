@@ -33,7 +33,7 @@ class CUBaseRemoteDataSourceImpl(
     suspend inline fun <reified T : Any> requestBuilder(
         request: Any? = null,
         urlString: String = EMPTY_STRING,
-        hostEnvironment: String= EMPTY_STRING,
+        hostEnvironment: String = EMPTY_STRING,
         headers: Headers = Headers.Empty,
 //        responseModel: KClass<out T>
     ) = try {
@@ -64,8 +64,7 @@ class CUBaseRemoteDataSourceImpl(
             if (indexResult == INDEX_NOT_FOUND) {
                 CUUiState.Error(message = result.bodyAsText())
             } else {
-
-                CUUiState.Error(message = CUErrorResponseEnum.entries[indexResult].messageError)
+                CUUiState.Error(message = CUErrorResponseEnum.entries[indexResult].messageError, error = result.bodyAsText())
             }
         }
     } catch (exception: Exception) {
