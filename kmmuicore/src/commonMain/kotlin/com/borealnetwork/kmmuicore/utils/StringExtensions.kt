@@ -1,5 +1,6 @@
 package com.borealnetwork.kmmuicore.utils
 
+import androidx.compose.ui.text.AnnotatedString
 import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
 
 
@@ -21,3 +22,6 @@ fun String.log(key: String, error: Boolean = true) {
 
 fun String.containsAlphanumericCharacters() = matches(Regex("^[A-Za-z0-9? ,_-]+\$"))
 fun String.isDigitsOnly() = matches(Regex("[0-9]"))
+
+
+fun String.toAnnotateString() = AnnotatedString(this)
