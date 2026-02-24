@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.borealnetwork.kmmuicore.domain.dialog.DialogParams
+import com.borealnetwork.kmmuicore.ui.components.ConfirmAndCancelButtons
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
 import kotlinx.coroutines.delay
@@ -43,11 +45,13 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 
 
-@Preview
 @Composable
-fun PreviewAlertDialog() {
+fun PreviewAlertDialog(params: DialogParams ) {
     QuestionAlertDialog(
-        params = DialogParams()
+        params = params
+    )
+    SessionAlertDialog(
+        params = params
     )
 }
 
@@ -79,7 +83,7 @@ fun QuestionAlertDialog(
         // Contenedor visual del diálogo
         Card(
             modifier = Modifier
-                .fillMaxWidth(0.9f) // Controlas el ancho exacto
+                .fillMaxWidth(params.fractionWidth) // Controlas el ancho exacto
                 .wrapContentHeight()
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
@@ -190,40 +194,65 @@ fun SessionAlertDialog(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // 3. Botón Principal (Confirmar)
-                Button(
-                    onClick = params.onConfirm,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp), // Altura un poco mayor para mejor área táctil
-                    colors = ButtonDefaults.buttonColors(containerColor = ActionBlueColor),
-                    shape = RoundedCornerShape(12.dp) // Bordes un poco más cuadrados que un "Stadium"
-                ) {
-                    Text(
-                        text = params.confirmText,
-                        fontWeight = FontWeight.Bold,
-                        color = White
+                if (params.showConfirmAndCancelButtons) {
+                    // 3. Botón Principal (Confirmar)
+                    ConfirmAndCancelButtons(
+                        confirmText = params.confirmText,
+                        onConfirm = params.onConfirm,
+                        onDismiss = params.onDismiss,
+                        dismissText = params.dismissText
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+    }
+}
 
-                // 4. Botón Secundario (Regresar)
-                if (params.dismissText?.isNotEmpty() == true) {
-                    TextButton(
-                        onClick = params.onDismiss,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text(
-                            text = params.dismissText.orEmpty(),
-                            fontWeight = FontWeight.Bold,
-                            color = ActionBlueColor
-                        )
-                    }
+@Composable
+fun CustomAlertDialog(
+    params: DialogParams,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    if (params.timer != null) {
+        LaunchedEffect(params.timer) {
+            val timeSource = TimeSource.Monotonic
+            val mark = timeSource.markNow()
+            params.timer.let {
+                val duration = it.milliseconds * 1000
+                while (mark.elapsedNow() < duration) {
+                    val remaining = duration - mark.elapsedNow()
+                    println("Tiempo restante: ${remaining.inWholeMilliseconds} ms")
+                    delay(1000)
                 }
+            }
+            params.onDismiss()
+        }
+    }
+    Dialog(
+        onDismissRequest = params.onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false // Permite diseños a pantalla completa o anchos personalizados
+        )
+    ) {
+        // Contenedor visual del diálogo
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(params.fractionWidth) // Controlas el ancho exacto
+                .wrapContentHeight()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(White)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                content()
             }
         }
     }

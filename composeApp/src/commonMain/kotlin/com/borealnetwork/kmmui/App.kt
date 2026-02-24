@@ -7,11 +7,19 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.borealnetwork.kmmuicore.domain.dialog.DialogParams
 import com.borealnetwork.kmmuicore.ui.components.SemiBoldText
+import com.borealnetwork.kmmuicore.ui.components.dialog.QuestionAlertDialog
+import com.borealnetwork.kmmuicore.utils.toAnnotateString
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_design_visibility
 import org.jetbrains.compose.resources.DrawableResource
@@ -54,7 +62,23 @@ sealed class NavigationScreen(
 @Preview
 fun App(navController: NavController = rememberNavController()) {
     MaterialTheme {
+        var showDialog by remember { mutableStateOf(Pair(false, DialogParams.EMPTY_DIALOG)) }
 
+        LaunchedEffect(Unit){
+            showDialog = DialogParams(
+                title = "Datos incorrectos",
+                confirmText = "Aceptar",
+                description = "Revísalos y vuelve a intentarlo. Si el error persiste, contacta a tu asesor.".toAnnotateString(),
+                timer = 5
+            ).build(
+                onConfirm = {
+                    showDialog = DialogParams.HIDE_DIALOG
+                },
+                onDismiss = {
+                    showDialog = DialogParams.HIDE_DIALOG
+                }
+            )
+        }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -69,6 +93,13 @@ fun App(navController: NavController = rememberNavController()) {
                 painter = painterResource(resource = Res.drawable.ic_design_visibility),
                 contentDescription = "Visibility Icon"
             )
+
+            if (showDialog.first) {
+                QuestionAlertDialog(
+                    params = showDialog.second
+                )
+            }
+
         }
     }
 }
