@@ -9,6 +9,7 @@ import com.borealnetwork.kmmuicore.utils.toAnnotateString
 data class DialogParams(
     val title: String = EMPTY_STRING,
     val showConfirmAndCancelButtons: Boolean = true,
+    val showCloseButton: Boolean = false,
     val description: AnnotatedString = AnnotatedString(EMPTY_STRING),
     val confirmText: String = "Aceptar",
     val dismissText: String? = "Cancelar",

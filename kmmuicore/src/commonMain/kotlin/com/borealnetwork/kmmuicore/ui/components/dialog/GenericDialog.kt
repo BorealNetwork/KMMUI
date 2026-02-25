@@ -40,13 +40,12 @@ import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeSource
 
 
 @Composable
-fun PreviewAlertDialog(params: DialogParams ) {
+fun PreviewAlertDialog(params: DialogParams) {
     QuestionAlertDialog(
         params = params
     )
@@ -96,17 +95,20 @@ fun QuestionAlertDialog(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        params.onDismiss()
-                    },
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_close_item),
-                        contentDescription = "Warning Icon",
-                        tint = Black
-                    )
+                if (params.showCloseButton) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Icon(
+                            modifier = Modifier.clickable {
+                                params.onDismiss()
+                            },
+                            painter = painterResource(Res.drawable.ic_close_item),
+                            contentDescription = "Warning Icon",
+                            tint = Black
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
