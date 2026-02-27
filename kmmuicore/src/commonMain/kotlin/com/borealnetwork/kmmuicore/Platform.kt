@@ -14,11 +14,7 @@ expect inline fun <reified T : ViewModel> Module.viewModelDefinition(
 ): KoinDefinition<T>
 
 
-
 expect fun getFixedImageBytes(path: String, maxWidth: Int = 2000): ByteArray
-expect class GeocodingService {
-    suspend fun getAddress(lat: Double, lon: Double): String?
-}
 
 expect fun compressImage(imageData: ByteArray, quality: Double = 0.7): ByteArray
 

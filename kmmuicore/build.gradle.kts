@@ -148,6 +148,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
 
             implementation(libs.androidx.exifinterface)
+            implementation(libs.play.services.location)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

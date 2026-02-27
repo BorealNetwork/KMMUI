@@ -1,12 +1,6 @@
 package com.borealnetwork.kmmuicore
 
-import androidx.lifecycle.ViewModel
-import org.koin.core.definition.Definition
-import org.koin.core.definition.KoinDefinition
-import org.koin.core.module.Module
 //import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.module.dsl.viewModel
-import org.koin.core.qualifier.Qualifier
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,26 +11,18 @@ import android.media.ExifInterface
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import com.borealnetwork.kmmuicore.data.datastore.createDataStore
-import com.borealnetwork.kmmuicore.domain.datastore.DataStorePath
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.suspendCancellableCoroutine
-import org.koin.dsl.module
+import org.koin.core.definition.Definition
+import org.koin.core.definition.KoinDefinition
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.Qualifier
 import java.io.ByteArrayOutputStream
 import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.system.exitProcess
 
-
-val androidModule = module {
-    // Android necesita el contexto para el Geocoder
-    single { GeocodingService(get()) }
-}
-
-fun provideDataStore(context: Context, fileName: String): DataStore<Preferences> = createDataStore {
-    context.filesDir.resolve(fileName).absolutePath
-}
 
 actual inline fun <reified T : ViewModel> Module.viewModelDefinition(
     qualifier: Qualifier?,
@@ -99,59 +85,7 @@ fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int): Int {
 }
 
 
-actual class GeocodingService(private val context: Context) {
-    actual suspend fun getAddress(lat: Double, lon: Double): String? =
-        suspendCancellableCoroutine { continuation ->
-            val geocoder = Geocoder(context, Locale.getDefault())
 
-            // 1. Verificamos la versión de Android
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // Versión Nueva (API 33+) - Usa Callback
-                geocoder.getFromLocation(lat, lon, 1, object : Geocoder.GeocodeListener {
-                    override fun onGeocode(addresses: MutableList<Address>) {
-                        val address = addresses.firstOrNull()
-                        continuation.resume(formatAddress(address))
-                    }
-
-                    override fun onError(errorMessage: String?) {
-                        continuation.resume(null)
-                    }
-                })
-            } else {
-                // Versión Antigua (Legacy)
-                try {
-                    @Suppress("DEPRECATION")
-                    val address = geocoder.getFromLocation(lat, lon, 1)?.firstOrNull()
-                    continuation.resume(formatAddress(address))
-                } catch (e: Exception) {
-                    continuation.resume(null)
-                }
-            }
-        }
-
-    // Función auxiliar para no repetir lógica de formateo
-    private fun formatAddress(address: Address?): String? {
-        if (address == null) return null
-
-        val street = address.thoroughfare ?: ""      // Calle
-        val number = address.subThoroughfare ?: ""   // Número
-        val city = address.locality ?: ""            // Ciudad
-        val state = address.adminArea ?: ""          // Estado
-
-        return listOfNotNull(
-            if (street.isNotEmpty()) "$street $number".trim() else null,
-            city.ifEmpty { null },
-            state.ifEmpty { null }
-        ).joinToString(", ")
-    }
-}
-
-actual val dataStoreModule = module {
-    single<DataStore<Preferences>> {
-        val dataStorePath = get<DataStorePath>().path
-        provideDataStore(context = get(),dataStorePath)
-    }
-}
 
 actual fun closeApplication() {
     // Mata el proceso actual con código 0 (cierre normal sin errores)

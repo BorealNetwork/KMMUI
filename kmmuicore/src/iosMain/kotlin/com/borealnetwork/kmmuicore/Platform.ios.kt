@@ -116,42 +116,7 @@ private fun fetchImageFromPhotoKit(phPath: String): UIImage? {
     return resultImage
 }
 
-actual class GeocodingService {
-    actual suspend fun getAddress(lat: Double, lon: Double): String? =
-        suspendCancellableCoroutine { continuation ->
-            val geocoder = CLGeocoder()
-            val location = CLLocation(latitude = lat, longitude = lon)
 
-            // Requiere manejo de callbacks (suspendCoroutine recomendado aquí)
-            // Simplificado:
-            geocoder.reverseGeocodeLocation(location) { placemarks, error ->
-                if (error != null) {
-                    // Si hay error, resumimos con null o podrías lanzar una excepción
-                    continuation.resume(null)
-                    return@reverseGeocodeLocation
-                }
-
-                val placemark = placemarks?.firstOrNull() as? CLPlacemark
-                if (placemark != null) {
-                    // Extraemos los componentes de la dirección
-                    val street = placemark.thoroughfare ?: ""       // Calle
-                    val number = placemark.subThoroughfare ?: ""    // Número
-                    val city = placemark.locality ?: ""             // Ciudad
-                    val state = placemark.administrativeArea ?: ""   // Estado/Provincia
-
-                    val fullAddress = listOfNotNull(
-                        if (street.isNotEmpty()) "$street $number".trim() else null,
-                        city.ifEmpty { null },
-                        state.ifEmpty { null }
-                    ).joinToString(", ")
-
-                    continuation.resume(fullAddress)
-                } else {
-                    continuation.resume(null)
-                }
-            }
-        }
-}
 
 actual fun compressImage(imageData: ByteArray, quality: Double): ByteArray {
     val data = imageData.toNSData()
