@@ -6,6 +6,7 @@ const val INDEX_NOT_FOUND = -1
 const val EMPTY_LIST_SIZE = 0
 const val MIN_VALUE = 0
 const val MINIMAL_SIZE_LIST = 1
+const val FULL_SCREEN_WIDTH = 1F
 const val MIN_DOUBLE_VALUE = 0.0
 const val MINIMAL_DOUBLE_VALUE = 1.0
 const val INITIAL_AMOUNT ="$0.00 MXN"

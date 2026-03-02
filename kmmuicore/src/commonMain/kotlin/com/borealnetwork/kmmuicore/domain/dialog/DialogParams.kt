@@ -13,6 +13,9 @@ import org.jetbrains.compose.resources.DrawableResource
 data class DialogParams(
     val titleScreen: String = "Screen name",
     val title: String = EMPTY_STRING,
+    val fullScreen: Boolean = false,
+    val onClickOutside: Boolean = false,
+    val onBackPress: Boolean = false,
     val showConfirmAndCancelButtons: Boolean = true,
     val showCloseButton: Boolean = false,
     val icon: DrawableResource = Res.drawable.ic_close_item,

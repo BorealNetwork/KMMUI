@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.borealnetwork.kmmuicore.domain.base.FULL_SCREEN_WIDTH
 import com.borealnetwork.kmmuicore.domain.dialog.DialogParams
 import com.borealnetwork.kmmuicore.ui.components.ConfirmAndCancelButtons
 import io.github.baudelioandalon.kmmuicore.drawable.Res
@@ -74,15 +75,15 @@ fun QuestionAlertDialog(
     Dialog(
         onDismissRequest = params.onDismiss,
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false // Permite diseños a pantalla completa o anchos personalizados
+            dismissOnBackPress = params.onBackPress,
+            dismissOnClickOutside = params.onClickOutside,
+            usePlatformDefaultWidth = params.fullScreen // Permite diseños a pantalla completa o anchos personalizados
         )
     ) {
         // Contenedor visual del diálogo
         Card(
             modifier = Modifier
-                .fillMaxWidth(params.fractionWidth) // Controlas el ancho exacto
+                .fillMaxWidth(if (params.fullScreen) FULL_SCREEN_WIDTH else params.fractionWidth) // Controlas el ancho exacto
                 .wrapContentHeight()
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
@@ -159,16 +160,16 @@ fun SessionAlertDialog(
     Dialog(
         onDismissRequest = params.onDismiss, // Qué pasa si tocan fuera del diálogo
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false // Permite controlar mejor los márgenes
+            dismissOnBackPress = params.onBackPress,
+            dismissOnClickOutside = params.onClickOutside,
+            usePlatformDefaultWidth = params.fullScreen // Permite diseños a pantalla completa o anchos personalizados
         )
     ) {
         Surface(
             shape = RoundedCornerShape(24.dp), // Bordes bien redondeados
             color = White,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(if (params.fullScreen) FULL_SCREEN_WIDTH else params.fractionWidth)
                 .padding(horizontal = 32.dp) // Margen con los bordes de la pantalla
         ) {
             Column(
@@ -234,15 +235,15 @@ fun CustomAlertDialog(
     Dialog(
         onDismissRequest = params.onDismiss,
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false // Permite diseños a pantalla completa o anchos personalizados
+            dismissOnBackPress = params.onBackPress,
+            dismissOnClickOutside = params.onClickOutside,
+            usePlatformDefaultWidth = params.fullScreen // Permite diseños a pantalla completa o anchos personalizados
         )
     ) {
         // Contenedor visual del diálogo
         Card(
             modifier = Modifier
-                .fillMaxWidth(params.fractionWidth) // Controlas el ancho exacto
+                .fillMaxWidth(if (params.fullScreen) FULL_SCREEN_WIDTH else params.fractionWidth) // Controlas el ancho exacto
                 .wrapContentHeight()
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
