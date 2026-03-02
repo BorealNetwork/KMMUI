@@ -5,11 +5,17 @@ import androidx.compose.ui.text.AnnotatedString
 import com.borealnetwork.kmmuicore.domain.base.EMPTY_STRING
 import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
 import com.borealnetwork.kmmuicore.utils.toAnnotateString
+import io.github.baudelioandalon.kmmuicore.drawable.Res
+import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
+import org.jetbrains.compose.resources.DrawableResource
 
 data class DialogParams(
+    val titleScreen: String = "Screen name",
     val title: String = EMPTY_STRING,
     val showConfirmAndCancelButtons: Boolean = true,
     val showCloseButton: Boolean = false,
+    val icon: DrawableResource = Res.drawable.ic_close_item,
+    val note: String? = null,
     val description: AnnotatedString = AnnotatedString(EMPTY_STRING),
     val confirmText: String = "Aceptar",
     val dismissText: String? = "Cancelar",
