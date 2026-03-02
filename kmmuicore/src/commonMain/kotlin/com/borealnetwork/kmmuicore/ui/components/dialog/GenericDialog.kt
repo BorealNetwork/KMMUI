@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -221,7 +222,7 @@ fun CustomAlertDialog(
         LaunchedEffect(params.timer) {
             val timeSource = TimeSource.Monotonic
             val mark = timeSource.markNow()
-            params.timer.let {
+            params.timer?.let {
                 val duration = it.milliseconds * 1000
                 while (mark.elapsedNow() < duration) {
                     val remaining = duration - mark.elapsedNow()
@@ -237,25 +238,40 @@ fun CustomAlertDialog(
         properties = DialogProperties(
             dismissOnBackPress = params.onBackPress,
             dismissOnClickOutside = params.onClickOutside,
-            usePlatformDefaultWidth = params.fullScreen // Permite diseños a pantalla completa o anchos personalizados
+            usePlatformDefaultWidth = !params.fullScreen // Permite diseños a pantalla completa o anchos personalizados
         )
     ) {
         // Contenedor visual del diálogo
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(if (params.fullScreen) FULL_SCREEN_WIDTH else params.fractionWidth) // Controlas el ancho exacto
-                .wrapContentHeight()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .background(White)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+        if (params.fullScreen) {
+            Card(
+                modifier = Modifier.fillMaxSize()
             ) {
-                content()
+                Column(
+                    modifier = Modifier
+                        .background(White),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    content()
+                }
+            }
+
+        } else {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(params.fractionWidth) // Controlas el ancho exacto
+                    .wrapContentHeight()
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .background(White)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    content()
+                }
             }
         }
     }
