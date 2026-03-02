@@ -24,7 +24,7 @@ mavenPublishing {
     pom {
         name = "KMMUI Library"
         description = "Libreria multiplataforma de componentes visuales y utilerias."
-        inceptionYear = "2025"
+        inceptionYear = "2026"
         url = "https://github.com/BorealNetwork/KMMUI/"
         licenses {
             license {

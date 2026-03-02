@@ -7,6 +7,7 @@ import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
 import com.borealnetwork.kmmuicore.utils.toAnnotateString
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
+import io.github.baudelioandalon.kmmuicore.drawable.ic_help
 import org.jetbrains.compose.resources.DrawableResource
 
 data class DialogParams(
@@ -31,11 +32,24 @@ data class DialogParams(
             title = "Error",
             description = "Ha ocurrido un error inesperado".toAnnotateString()
         )
+        val LOCATION_PERMISSION_DIALOG = DialogParams(
+            icon = Res.drawable.ic_help,
+            titleScreen = "Acceso a localización",
+            title = "Dar acceso a localización",
+            description = ("Para prospectar clientes y optimizar tu experiencia, " +
+                    "necesitamos acceder a tu ubicación. Esto nos permite ofrecerte información " +
+                    "relevante. Para que podamos acceder a la ubicación, solo ve a la configuración " +
+                    "de tu teléfono, busca \"aplicaciones\", elige [Nombre de la app], toca" +
+                    " \"permisos\" y activa la opción de \"ubicación\".").toAnnotateString(),
+            confirmText = "Ir a configuración"
+        )
+
         fun successDialog(message: String, timer: Int? = null) = DialogParams(
             title = "Exito",
             timer = timer,
             description = message.toAnnotateString()
         )
+
         fun errorDialog(error: String, timer: Int? = null) = DialogParams(
             title = "Error",
             confirmText = "OK",
@@ -43,6 +57,7 @@ data class DialogParams(
             description = error.toAnnotateString(),
             dismissText = EMPTY_STRING
         )
+
         val HIDE_DIALOG = Pair(false, EMPTY_DIALOG)
     }
 
@@ -56,6 +71,7 @@ data class DialogParams(
             onConfirm = onConfirm
         )
     )
+
     fun build() = Pair(
         true,
         this.copy()
