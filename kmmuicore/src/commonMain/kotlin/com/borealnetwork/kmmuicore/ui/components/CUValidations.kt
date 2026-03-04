@@ -4,7 +4,12 @@ import androidx.compose.runtime.Composable
 import com.borealnetwork.kmmuicore.network.core.CUUiState
 
 @Composable
-fun ValidationQuery(status: CUUiState<*>, onError: (CUUiState.Error<*>) -> Unit = {},onNextView: () -> Unit = {}) {
+fun ValidationQuery(
+    status: CUUiState<*>,
+    onError: (CUUiState.Error<*>) -> Unit = {},
+    onLoadingContent: @Composable (() -> Unit) = { ProgressLoader(true) },
+    onNextView: () -> Unit = {}
+) {
     when (status) {
         is CUUiState.Error<*> -> {
             status.message?.let {
@@ -14,7 +19,7 @@ fun ValidationQuery(status: CUUiState<*>, onError: (CUUiState.Error<*>) -> Unit 
         }
 
         is CUUiState.Loading -> {
-            ProgressLoader(true)
+            onLoadingContent()
         }
 
 

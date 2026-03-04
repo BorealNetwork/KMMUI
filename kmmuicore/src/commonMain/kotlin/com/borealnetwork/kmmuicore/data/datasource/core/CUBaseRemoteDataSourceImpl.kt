@@ -35,7 +35,6 @@ class CUBaseRemoteDataSourceImpl(
         urlString: String = EMPTY_STRING,
         hostEnvironment: String = EMPTY_STRING,
         headers: Headers = Headers.Empty,
-//        responseModel: KClass<out T>
     ) = try {
         val result = if (request != null) {
             httpClient.post(urlString = hostEnvironment + urlString) {
