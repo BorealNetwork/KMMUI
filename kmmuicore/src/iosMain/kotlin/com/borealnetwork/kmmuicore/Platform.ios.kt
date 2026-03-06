@@ -8,16 +8,12 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.readValue
 import kotlinx.cinterop.useContents
 import kotlinx.cinterop.usePinned
-import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module
 import org.koin.core.qualifier.Qualifier
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSizeMake
-import platform.CoreLocation.CLGeocoder
-import platform.CoreLocation.CLLocation
-import platform.CoreLocation.CLPlacemark
 import platform.Photos.PHAsset
 import platform.Photos.PHImageContentModeAspectFit
 import platform.Photos.PHImageManager
@@ -32,7 +28,6 @@ import platform.UIKit.UIImageJPEGRepresentation
 import platform.posix.exit
 import platform.posix.memcpy
 import qrgenerator.toNSData
-import kotlin.coroutines.resume
 
 
 actual inline fun <reified T : ViewModel> Module.viewModelDefinition(
@@ -115,7 +110,6 @@ private fun fetchImageFromPhotoKit(phPath: String): UIImage? {
 
     return resultImage
 }
-
 
 
 actual fun compressImage(imageData: ByteArray, quality: Double): ByteArray {
