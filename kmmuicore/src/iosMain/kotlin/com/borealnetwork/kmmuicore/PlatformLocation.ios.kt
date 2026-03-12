@@ -39,6 +39,7 @@ actual val locationPermissionListenerModule = module {
 val iosGeocodingServiceModule = module {
     single { GeocodingService() }
 }
+
 actual class GeocodingService {
     actual suspend fun getAddress(lat: Double, lon: Double): String? =
         suspendCancellableCoroutine { continuation ->
