@@ -13,6 +13,8 @@ import org.jetbrains.compose.resources.DrawableResource
 data class DialogParams(
     val titleScreen: String = "Screen name",
     val title: String = EMPTY_STRING,
+    val date: String = EMPTY_STRING,
+    val status: String = EMPTY_STRING,
     val fullScreen: Boolean = false,
     val onClickOutside: Boolean = false,
     val onBackPress: Boolean = false,
