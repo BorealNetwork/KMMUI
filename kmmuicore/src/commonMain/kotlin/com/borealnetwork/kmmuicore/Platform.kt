@@ -1,6 +1,7 @@
 package com.borealnetwork.kmmuicore
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
@@ -25,3 +26,9 @@ expect fun BackPressHandler(
     isEnabled: Boolean = true,
     onBackPressed: () -> Unit
 )
+
+
+// 1. El contrato que cada plataforma debe cumplir
+expect fun ByteArray.toImageBitmap(): ImageBitmap
+
+expect fun ByteArray.compressAndEncodeToBase64(quality: Int = 70): String

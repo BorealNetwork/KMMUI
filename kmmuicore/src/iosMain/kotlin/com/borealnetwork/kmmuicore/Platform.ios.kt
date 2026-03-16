@@ -1,19 +1,26 @@
 package com.borealnetwork.kmmuicore
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.lifecycle.ViewModel
 import com.kashif.cameraK.utils.toByteArray
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.readValue
 import kotlinx.cinterop.useContents
 import kotlinx.cinterop.usePinned
+import org.jetbrains.skia.Image
 import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module
 import org.koin.core.qualifier.Qualifier
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSizeMake
+import platform.Foundation.NSData
+import platform.Foundation.base64EncodedStringWithOptions
+import platform.Foundation.create
 import platform.Photos.PHAsset
 import platform.Photos.PHImageContentModeAspectFit
 import platform.Photos.PHImageManager
@@ -131,4 +138,36 @@ actual fun BackPressHandler(
 ) {
     // Intencionalmente vacío.
     // En iOS, el retroceso se maneja visualmente con el botón "< Atrás" en la TopAppBar
+}
+
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
+    // En iOS, usamos Skia para leer los bytes codificados
+    return Image.makeFromEncoded(this).toComposeImageBitmap()
+}
+
+
+actual fun ByteArray.compressAndEncodeToBase64(quality: Int): String {
+    // 1. Convertir ByteArray (Kotlin) a NSData (iOS)
+    val nsData = this.toNSData()
+
+    // 2. Crear el UIImage a partir de los datos
+    val image = UIImage(data = nsData) ?: return ""
+
+    // 3. Comprimir a JPEG (calidad va de 0.0 a 1.0)
+    val qualityF = quality / 100.0
+    val compressedData = UIImageJPEGRepresentation(image, qualityF) ?: return ""
+
+    // 4. Convertir a String en Base64
+    // 0u significa que no le agregamos opciones extra (como saltos de línea)
+    return compressedData.base64EncodedStringWithOptions(0u)
+}
+
+// Función de extensión (helper) para convertir de ByteArray a NSData
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+private fun ByteArray.toNSData(): NSData {
+    if (this.isEmpty()) return NSData()
+    return this.usePinned { pinned ->
+        NSData.create(bytes = pinned.addressOf(0), length = this.size.toULong())
+    }
 }

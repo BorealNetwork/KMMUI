@@ -9,8 +9,11 @@ import android.location.Address
 import android.location.Geocoder
 import android.media.ExifInterface
 import android.os.Build
+import android.util.Base64
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.definition.Definition
@@ -110,4 +113,29 @@ actual fun BackPressHandler(
     BackHandler(enabled = isEnabled) {
         onBackPressed()
     }
+}
+
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
+    // Convierte los bytes a un Bitmap nativo de Android y luego al ImageBitmap de Compose
+    return BitmapFactory.decodeByteArray(this, 0, this.size).asImageBitmap()
+}
+actual fun ByteArray.compressAndEncodeToBase64(quality: Int): String {
+    // 1. Decodificar el ByteArray crudo a un Bitmap
+    val bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)
+        ?: return "" // O lanzar una excepción si lo prefieres
+
+    // 2. Comprimir en WebP
+    val outputStream = ByteArrayOutputStream()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, quality, outputStream)
+    } else {
+        @Suppress("DEPRECATION")
+        bitmap.compress(Bitmap.CompressFormat.WEBP, quality, outputStream)
+    }
+
+    val compressedBytes = outputStream.toByteArray()
+
+    // 3. Convertir los bytes comprimidos a un String en Base64
+    return Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
 }
