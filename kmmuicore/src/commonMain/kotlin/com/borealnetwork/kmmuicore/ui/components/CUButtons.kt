@@ -77,7 +77,7 @@ fun ConfirmAndCancelButtons(
         ) {
             Text(
                 text = confirmText,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 color = White
             )
         }
@@ -93,8 +93,8 @@ fun ConfirmAndCancelButtons(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    text = dismissText.orEmpty(),
-                    fontWeight = FontWeight.Bold,
+                    text = dismissText,
+                    fontWeight = FontWeight.ExtraBold,
                     color = ActionBlueColor
                 )
             }

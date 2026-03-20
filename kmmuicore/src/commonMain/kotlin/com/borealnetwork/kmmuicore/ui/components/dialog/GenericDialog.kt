@@ -1,5 +1,6 @@
 package com.borealnetwork.kmmuicore.ui.components.dialog
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -177,6 +179,16 @@ fun SessionAlertDialog(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // LÓGICA NUEVA: Dibujar el ícono si existe
+                if (params.icon != null) {
+                    Image(
+                        painter = painterResource(params.icon),
+                        contentDescription = "Dialog Image",
+                        modifier = Modifier.size(48.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
                 // 1. Título
                 Text(
                     text = params.title,

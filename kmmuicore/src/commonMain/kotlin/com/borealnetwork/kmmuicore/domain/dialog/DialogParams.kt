@@ -20,7 +20,7 @@ data class DialogParams(
     val onBackPress: Boolean = false,
     val showConfirmAndCancelButtons: Boolean = true,
     val showCloseButton: Boolean = false,
-    val icon: DrawableResource = Res.drawable.ic_close_item,
+    val icon: DrawableResource? = Res.drawable.ic_close_item,
     val note: String? = null,
     val description: AnnotatedString = AnnotatedString(EMPTY_STRING),
     val confirmText: String = "Aceptar",
