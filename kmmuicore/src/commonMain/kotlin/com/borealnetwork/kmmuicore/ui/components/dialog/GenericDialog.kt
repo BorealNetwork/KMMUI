@@ -66,11 +66,13 @@ fun QuestionAlertDialog(
         LaunchedEffect(params.timer) {
             val timeSource = TimeSource.Monotonic
             val mark = timeSource.markNow()
-            val duration = params.timer.milliseconds * 1000
-            while (mark.elapsedNow() < duration) {
-                val remaining = duration - mark.elapsedNow()
-                println("Tiempo restante: ${remaining.inWholeMilliseconds} ms")
-                delay(1000)
+            params.timer?.let {
+                val duration = it.milliseconds * 1000
+                while (mark.elapsedNow() < duration) {
+                    val remaining = duration - mark.elapsedNow()
+                    println("Tiempo restante: ${remaining.inWholeMilliseconds} ms")
+                    delay(1000)
+                }
             }
             params.onDismiss()
         }
@@ -160,6 +162,21 @@ val ActionBlueColor = Color(0xFF0022DF)
 fun SessionAlertDialog(
     params: DialogParams
 ) {
+    if (params.timer != null) {
+        LaunchedEffect(params.timer) {
+            val timeSource = TimeSource.Monotonic
+            val mark = timeSource.markNow()
+            params.timer?.let {
+                val duration = it.milliseconds * 1000
+                while (mark.elapsedNow() < duration) {
+                    val remaining = duration - mark.elapsedNow()
+                    println("Tiempo restante: ${remaining.inWholeMilliseconds} ms")
+                    delay(1000)
+                }
+            }
+            params.onDismiss()
+        }
+    }
     Dialog(
         onDismissRequest = params.onDismiss, // Qué pasa si tocan fuera del diálogo
         properties = DialogProperties(
