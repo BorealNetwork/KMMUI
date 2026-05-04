@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.borealnetwork.kmmuicore.ui.theme.CUGrayColor
+import com.borealnetwork.kmmuicore.ui.theme.onestFamily
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -70,6 +72,9 @@ fun LoadingDialog(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Text(
+                    lineHeight = 26.sp,
+                    fontFamily = onestFamily(),
+                    style = MaterialTheme.typography.bodyLarge,
                     text = isLoading.second,
                     color = Color.White,
                     fontSize = 18.sp,
