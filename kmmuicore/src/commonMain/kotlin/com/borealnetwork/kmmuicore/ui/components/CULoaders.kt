@@ -72,13 +72,13 @@ fun LoadingDialog(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Text(
-                    lineHeight = 26.sp,
                     fontFamily = onestFamily(),
                     style = MaterialTheme.typography.bodyLarge,
                     text = isLoading.second,
                     color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 26.sp,
+                    fontSize = 22.sp,
                 )
             }
         }

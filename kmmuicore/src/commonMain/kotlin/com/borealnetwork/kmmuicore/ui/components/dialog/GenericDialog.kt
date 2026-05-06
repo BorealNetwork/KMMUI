@@ -35,11 +35,13 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.borealnetwork.kmmuicore.domain.base.FULL_SCREEN_WIDTH
 import com.borealnetwork.kmmuicore.domain.dialog.DialogParams
 import com.borealnetwork.kmmuicore.ui.components.ConfirmAndCancelButtons
+import com.borealnetwork.kmmuicore.ui.theme.onestFamily
 import io.github.baudelioandalon.kmmuicore.drawable.Res
 import io.github.baudelioandalon.kmmuicore.drawable.ic_close_item
 import kotlinx.coroutines.delay
@@ -123,7 +125,12 @@ fun QuestionAlertDialog(
                 )
                 Text(
                     text = params.description,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 18.sp,
+                    lineHeight = 22.sp,
+                    fontFamily = onestFamily(),
+                    color = Color(0xFF49454F),
+                    textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -135,7 +142,13 @@ fun QuestionAlertDialog(
                         params.onDismiss()
                     }) {
                         Text(
-                            text = params.dismissText.orEmpty()
+                            text = params.dismissText.orEmpty(),
+                            fontWeight = FontWeight.Bold,
+                            color = ActionBlueColor,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = onestFamily(),
+                            fontSize = 16.sp,
+                            lineHeight = 22.5.sp
                         )
                     }
                     Button(
@@ -146,7 +159,13 @@ fun QuestionAlertDialog(
                             params.onConfirm()
                         }) {
                         Text(
-                            text = params.confirmText
+                            text = params.confirmText,
+                            fontWeight = FontWeight.Bold,
+                            color = White,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = onestFamily(),
+                            fontSize = 16.sp,
+                            lineHeight = 22.5.sp
                         )
                     }
                 }
@@ -211,6 +230,9 @@ fun SessionAlertDialog(
                     text = params.title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
+                    fontSize = 22.sp,
+                    lineHeight = 26.sp,
+                    fontFamily = onestFamily(),
                     color = Black,
                     textAlign = TextAlign.Center
                 )
@@ -222,7 +244,10 @@ fun SessionAlertDialog(
                     text = params.description,
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color(0xFF49454F), // Gris oscuro Material 3
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontSize = 18.sp,
+                    lineHeight = 22.sp,
+                    fontFamily = onestFamily(),
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))

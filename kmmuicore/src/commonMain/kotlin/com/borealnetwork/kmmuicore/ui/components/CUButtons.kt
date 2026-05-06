@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.borealnetwork.kmmuicore.ui.components.dialog.ActionBlueColor
 import com.borealnetwork.kmmuicore.ui.theme.CUDisabledColor
 import com.borealnetwork.kmmuicore.ui.theme.PrimaryColor
+import com.borealnetwork.kmmuicore.ui.theme.onestFamily
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -78,7 +79,11 @@ fun ConfirmAndCancelButtons(
             Text(
                 text = confirmText,
                 fontWeight = FontWeight.ExtraBold,
-                color = White
+                color = White,
+                style = MaterialTheme.typography.bodyLarge,
+                fontFamily = onestFamily(),
+                fontSize = 16.sp,
+                lineHeight = 22.5.sp
             )
         }
 
@@ -95,7 +100,11 @@ fun ConfirmAndCancelButtons(
                 Text(
                     text = dismissText,
                     fontWeight = FontWeight.ExtraBold,
-                    color = ActionBlueColor
+                    color = ActionBlueColor,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = onestFamily(),
+                    fontSize = 16.sp,
+                    lineHeight = 22.5.sp
                 )
             }
         }
